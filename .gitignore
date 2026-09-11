@@ -43,3 +43,8 @@ check-result.txt
 *.exe
 *.zip
 *.pem
+# Installer binaries (too large for git)
+*.msi
+*.msix
+*.msixbundle
+*.exe
