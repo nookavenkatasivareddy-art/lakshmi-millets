@@ -1,0 +1,5 @@
+﻿build-angular: True
+--- backend syntax checks ---
+orders.js OK
+whatsapp.js OK
+Order.js OK

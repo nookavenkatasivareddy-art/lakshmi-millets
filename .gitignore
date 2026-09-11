@@ -1,0 +1,36 @@
+# Secrets - NEVER commit
+backend/.env
+.env
+*.env
+!backend/.env.example
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build outputs
+frontend/dist/
+dist/
+
+# Angular cache
+frontend/.angular/
+.angular/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Nested git repo / scratch push copy
+_backend_push/
+
+# Temp
+build-result.txt
+build-final.txt
+git-state.txt
+EC2-FIX-PACK.txt

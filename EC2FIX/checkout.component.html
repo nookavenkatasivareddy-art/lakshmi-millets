@@ -1,0 +1,151 @@
+<section class="container checkout-page">
+  <h2 class="section-title">Checkout</h2>
+
+  <div class="checkout-grid">
+    <div class="checkout-form">
+
+      <div class="card section-block">
+        <h3>1. Delivery Address</h3>
+        <p class="hint">Select a saved address or add a new one:</p>
+
+        <div class="saved-addresses" *ngIf="savedAddresses.length > 0">
+          <label class="address-card" *ngFor="let addr of savedAddresses" [class.selected]="selectedAddressId === (addr.id || addr._id)">
+            <input type="radio" name="savedAddress" [value]="addr.id || addr._id" (change)="selectAddress(addr.id || addr._id || '')" [checked]="selectedAddressId === (addr.id || addr._id)">
+            <div>
+              <b>{{ addr.fullName }}</b>
+              <small>{{ addr.line1 }}, {{ addr.line2 || '' }}</small>
+              <small>{{ addr.city }}, {{ addr.state }} - {{ addr.pincode }}</small>
+              <small>📞 {{ addr.phone }}</small>
+            </div>
+          </label>
+        </div>
+
+        <div class="new-address-toggle" *ngIf="savedAddresses.length > 0">
+          <button type="button" class="btn btn-outline small" (click)="toggleNewAddressForm()">
+            {{ showNewAddressForm ? 'Cancel' : '+ Add New Address' }}
+          </button>
+        </div>
+
+        <div class="new-address-form" [class.open]="showNewAddressForm || savedAddresses.length === 0">
+          <form [formGroup]="addressForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" formControlName="fullName" placeholder="Receiver's name">
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" formControlName="phone" placeholder="10-digit mobile">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Address Line 1</label>
+              <input type="text" formControlName="line1" placeholder="House no, street, area">
+            </div>
+            <div class="form-group">
+              <label>Address Line 2 (optional)</label>
+              <input type="text" formControlName="line2" placeholder="Landmark, apartment, etc.">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>City</label>
+                <input type="text" formControlName="city" placeholder="City">
+              </div>
+              <div class="form-group">
+                <label>State</label>
+                <input type="text" formControlName="state" placeholder="State">
+              </div>
+              <div class="form-group">
+                <label>Pincode</label>
+                <input type="text" formControlName="pincode" placeholder="6-digit pincode">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card section-block">
+        <h3>2. Payment Method</h3>
+        <div class="payment-options">
+          <label class="payment-card" [class.selected]="paymentMethod === 'COD'">
+            <input type="radio" name="pm" value="COD" [(ngModel)]="paymentMethod"> 💵 Cash on Delivery
+          </label>
+          <label class="payment-card" [class.selected]="paymentMethod === 'UPI'">
+            <input type="radio" name="pm" value="UPI" [(ngModel)]="paymentMethod"> 📱 UPI
+          </label>
+          <label class="payment-card" [class.selected]="paymentMethod === 'CARD'">
+            <input type="radio" name="pm" value="CARD" [(ngModel)]="paymentMethod"> 💳 Credit/Debit Card
+          </label>
+          <label class="payment-card" [class.selected]="paymentMethod === 'NETBANKING'">
+            <input type="radio" name="pm" value="NETBANKING" [(ngModel)]="paymentMethod"> 🏦 Net Banking
+          </label>
+        </div>
+
+        <!-- UPI APP GRID -->
+        <div class="upi-panel" *ngIf="paymentMethod === 'UPI'">
+          <p class="secured-note">🔒 100% Secured Payment</p>
+
+          <div class="upi-app-grid">
+            <button type="button" class="upi-app" *ngFor="let app of upiApps" [class.active]="selectedUpiApp === app.id" (click)="selectUpiApp(app.id)">
+              <span class="upi-icon" [style.background]="app.color">{{ app.short }}</span>
+              <span>{{ app.name }}</span>
+            </button>
+          </div>
+
+          <div class="or-divider"><span></span><b>OR</b><span></span></div>
+
+          <button type="button" class="send-link-card" (click)="openPaymentLinkModal()">
+            <span class="link-icon">🔗</span>
+            <span class="link-text">
+              <b>Send Payment Link</b>
+              <small>Share this payment link with your friends and family, ask them to make the payment for you</small>
+            </span>
+            <span class="chevron">›</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-summary card">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Items Total</span><span>₹{{ itemsTotal }}</span></div>
+      <div class="summary-row"><span>Delivery Charge</span><span>₹{{ deliveryCharge }}</span></div>
+      <hr>
+      <div class="summary-row total"><span>Grand Total</span><span>₹{{ grandTotal }}</span></div>
+
+      <div class="error-text" *ngIf="errorMsg">{{ errorMsg }}</div>
+
+      <button class="btn btn-primary full-width" (click)="placeOrder()" [disabled]="placing">
+        {{ placing ? 'Placing Order...' : 'Place Order' }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- SEND PAYMENT LINK MODAL -->
+<div class="sheet-backdrop" *ngIf="showPaymentLinkModal" (click)="closePaymentLinkModal()">
+  <div class="sheet-panel" (click)="$event.stopPropagation()">
+    <button class="sheet-close" (click)="closePaymentLinkModal()">✕</button>
+
+    <h3 class="sheet-title">Send UPI Payment Link of <span class="amount-pill">₹{{ grandTotal }}</span></h3>
+
+    <div class="sheet-step">
+      <div class="step-icon blue">🔗</div>
+      <div>
+        <b>Request someone else for payment</b>
+        <p>Send link via WhatsApp or any other app</p>
+      </div>
+    </div>
+
+    <div class="sheet-step">
+      <div class="step-icon outline">👆</div>
+      <div>
+        <b>Second person completes payment</b>
+        <p>Order is automatically placed once payment is completed</p>
+      </div>
+    </div>
+
+    <button class="btn-share-link" (click)="sharePaymentLink()">Share Payment Link</button>
+    <p class="expiry-note">The link will expire in 20 minutes</p>
+  </div>
+</div>

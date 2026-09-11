@@ -1,0 +1,37 @@
+<section class="container detail-page" *ngIf="product as p">
+  <div class="detail-grid">
+    <div class="detail-img card">
+      <img [src]="p.image | imageUrl:'products'" [alt]="p.name" onerror="this.src='assets/images/placeholder.jpg'">
+    </div>
+    <div class="detail-info">
+      <h2>{{ p.name }}</h2>
+      <p class="weight">{{ p.weight }}</p>
+      <div class="product-price">
+        <span class="price big">₹{{ p.price }}</span>
+        <span class="mrp">₹{{ p.mrp }}</span>
+        <span class="badge in-stock" *ngIf="p.stock > 5">In Stock</span>
+        <span class="badge low-stock" *ngIf="p.stock > 0 && p.stock <= 5">Only {{ p.stock }} left</span>
+        <span class="badge out-of-stock" *ngIf="p.stock <= 0">Out of Stock</span>
+      </div>
+      <p class="description">{{ p.description }}</p>
+
+      <div class="qty-row" *ngIf="p.stock > 0">
+        <label>Quantity</label>
+        <div class="qty-selector">
+          <button (click)="changeQty(-1)" [disabled]="quantity <= 1">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="changeQty(1)" [disabled]="quantity >= p.stock">+</button>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-outline" [disabled]="p.stock <= 0" (click)="addToCart()">🛒 Add to Cart</button>
+        <button class="btn btn-primary" [disabled]="p.stock <= 0" (click)="buyNow()">
+          {{ p.stock <= 0 ? 'Out of Stock' : 'Buy Now →' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<p class="container" *ngIf="!loading && !product">Product not found.</p>
