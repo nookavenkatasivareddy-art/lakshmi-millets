@@ -28,6 +28,8 @@ Thumbs.db
 
 # Nested git repo / scratch push copy
 _backend_push/
+# Old fix snapshots - DO NOT bulk-copy over src (regresses fixes)
+EC2FIX/
 
 # Temp
 build-result.txt
