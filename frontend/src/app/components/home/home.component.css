@@ -1,0 +1,260 @@
+.highlight { color: var(--brown); }
+.section-title.center { text-align: center; }
+
+/* HERO BANNER */
+.hero-banner {
+  width: 100%;
+  height: 610px;
+  background-image: url('/assets/images/hero-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  padding: 0 100px;
+}
+
+.hero-content {
+  max-width: 450px;
+  margin-left: 50px;
+}
+
+.hero-content h1 {
+  font-size: 35px;
+  font-family: 'Georgia', serif;
+  color: #2b2b2b;
+}
+
+.highlight {
+  color: #7a2e1e;
+}
+
+.desc {
+  color: #444;
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.badge {
+  background: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+  background: #1e3d1f;
+  color: #fff;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .hero-banner {
+    height: auto;
+    padding: 40px 20px;
+    background-position: top;
+  }
+  .hero-content {
+    max-width: 100%;
+    margin-left: 0;
+  }
+  .hero-content h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 { font-size: 24px; }
+  .desc { font-size: 14px; }
+  .badge { font-size: 12px; padding: 6px 12px; }
+  .btn-primary { width: 100%; justify-content: center; padding: 12px 20px; }
+}
+
+.hero-image { width: 100%; line-height: 0; }
+.hero-image img { width: 100%; max-height: 480px; object-fit: cover; display: block; }
+
+@media (max-width: 768px) {
+  .hero-image img { max-height: 260px; }
+}
+
+/* POPULAR PRODUCTS */
+.popular-section { padding: 55px 0; }
+.popular-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
+
+.recipe-card p {
+  padding: 12px 10px;
+  color: var(--green-dark);
+  font-size: 15px;
+}
+.product-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.product-card { padding: 14px; cursor: pointer; text-align: center; }
+.product-img { height: 130px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; position: relative; }
+.product-img img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.product-card h4 { font-size: 14px; margin: 6px 0; min-height: 36px; }
+.product-card.out-of-stock .product-img img { opacity: 0.45; }
+.stock-badge { position: absolute; top: 4px; right: 4px; font-size: 10.5px; font-weight: 700; padding: 3px 8px; border-radius: 10px; color: #fff; z-index: 1; }
+.stock-badge.out { background: #c0392b; }
+.btn[disabled] { opacity: 0.55; cursor: not-allowed; }
+.product-price { margin-bottom: 10px; }
+.full-width { width: 100%; justify-content: center; }
+
+/* RECIPES */
+.recipes-section { padding: 40px 0 60px; text-align: center; }
+.recipes-section p { color: #666; margin-bottom: 24px; }
+.recipe-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.recipe-card { border-radius: 10px; overflow: hidden; background: #fff; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.recipe-card img { width: 100%; height: 130px; object-fit: cover; }
+.recipe-card p { padding: 10px; font-weight: 600; font-size: 13px; color: var(--green-dark); }
+
+/* TESTIMONIAL */
+.testimonial-section {
+  width: 100%;
+  padding: 0px 0px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: contain;
+}
+
+.testimonial-box {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  min-height: 160px;
+  background-image: url('/assets/images/testimonial-bg.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 60px;
+  box-sizing: border-box;
+}
+
+.testimonial-text {
+  font-size: 20px;
+  font-style: inherit;
+  color: #3a2e1f;
+  max-width: 700px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+
+.testimonial-author {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--green-dark, #4a7c2f);
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .testimonial-box {
+    padding: 30px 20px;
+    min-height: 140px;
+  }
+  .testimonial-text {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .product-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 1000px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .recipe-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .popular-header { flex-direction: column; align-items: flex-start; }
+  .testimonial-text { font-size: 14px; }
+}
+
+@media (max-width: 380px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .product-card { padding: 8px; }
+  .product-img { height: 90px; }
+  .product-card h4 { font-size: 12.5px; min-height: 30px; }
+}
+
+/* ===== Scrolling Category Strip ===== */
+.category-strip-section {
+  padding: 30px 20px 10px;
+}
+.category-strip {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 10px 4px 18px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--green-light) transparent;
+}
+.category-strip::-webkit-scrollbar { height: 6px; }
+.category-strip::-webkit-scrollbar-thumb { background: var(--green-light); border-radius: 10px; }
+.category-strip::-webkit-scrollbar-track { background: transparent; }
+
+.category-pill {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  scroll-snap-align: start;
+  width: 100px;
+  text-align: center;
+}
+.category-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--green-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  overflow: hidden;
+  transition: transform 0.2s, background 0.2s;
+  border: 2px solid transparent;
+}
+.category-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.category-pill:hover .category-icon {
+  background: var(--green);
+  transform: translateY(-4px);
+  border-color: var(--green-dark);
+}
+.category-pill:hover .category-icon span { filter: brightness(0) invert(1); }
+.category-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.category-pill:hover .category-name { color: var(--green-dark); }
+
+@media (max-width: 600px) {
+  .category-icon { width: 64px; height: 64px; font-size: 24px; }
+  .category-pill { width: 82px; }
+}

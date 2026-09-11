@@ -1,0 +1,98 @@
+.highlight { color: #7a2e1e; }
+
+/* PAGE HERO */
+.about-hero {
+  background: var(--green-light);
+  padding: 50px 20px 40px;
+  text-align: center;
+}
+.about-hero .section-title {
+  font-size: 32px;
+  justify-content: center;
+}
+.about-hero .hero-sub {
+  max-width: 600px;
+  margin: 10px auto 0;
+  color: #55603f;
+  font-size: 15px;
+}
+
+@media (max-width: 600px) {
+  .about-hero .section-title { font-size: 24px; }
+}
+
+/* WHY CHOOSE MILLETS */
+.why-section {
+  background: #fff;
+  padding: 55px 20px;
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.why-content {
+  flex: 1;
+  min-width: 280px;
+}
+
+.why-desc {
+  color: #666;
+  max-width: 400px;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.why-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.why-icon {
+  font-size: 22px;
+}
+
+.why-item h4 {
+  margin: 0;
+  font-size: 15px;
+  color: var(--green-dark);
+}
+
+.why-item small {
+  color: #888;
+  font-size: 12px;
+}
+
+/* IMAGE — small, no black background */
+.why-image {
+  flex: 1 1 260px;
+  max-width: 420px;
+  width: 100%;
+  background: none;
+  padding: 0;
+  text-align: center;
+}
+
+.why-image img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .why-section { padding: 36px 16px; gap: 24px; }
+  .why-grid { grid-template-columns: 1fr; gap: 14px; }
+  .why-image { max-width: 260px; }
+}

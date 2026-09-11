@@ -1,0 +1,69 @@
+<section class="contact-hero">
+  <div class="container">
+    <h1 class="section-title">Contact <span class="highlight">Us</span> 📞</h1>
+    <p class="hero-sub">We'd love to hear from you — reach out for orders, queries or feedback.</p>
+  </div>
+</section>
+
+<section class="contact-page container">
+  <div class="contact-grid">
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+      <div class="info-card">
+        <span class="info-icon">📞</span>
+        <div>
+          <h4>Call Us</h4>
+          <a href="tel:+918897626612">+91 88976 26612</a>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">✉️</span>
+        <div>
+          <h4>Email Us</h4>
+          <a href="mailto:support&#64;lakshmimillets.com">support&#64;lakshmimillets.com</a>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">📍</span>
+        <div>
+          <h4>Locations</h4>
+          <p>Hyderabad · Bangalore · Chennai · Andhra Pradesh</p>
+        </div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">⏰</span>
+        <div>
+          <h4>Working Hours</h4>
+          <p>Mon – Sat, 9:00 AM – 7:00 PM</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-wrap card">
+      <h3>Send Us a Message</h3>
+
+      <form *ngIf="!submitted" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <label>
+          Name
+          <input type="text" name="name" [(ngModel)]="name" required placeholder="Your name">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" [(ngModel)]="email" required placeholder="you&#64;example.com">
+        </label>
+        <label>
+          Message
+          <textarea name="message" [(ngModel)]="message" required rows="5" placeholder="How can we help you?"></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary" [disabled]="contactForm.invalid">Send Message →</button>
+      </form>
+
+      <div class="success-msg" *ngIf="submitted">
+        ✅ Thank you! Your message has been received. We'll get back to you soon.
+      </div>
+    </div>
+
+  </div>
+</section>

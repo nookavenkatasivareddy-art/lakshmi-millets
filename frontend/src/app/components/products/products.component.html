@@ -1,0 +1,33 @@
+<section class="container products-page">
+  <h2 class="section-title">Our <span class="highlight">Products</span></h2>
+
+  <div class="filter-row">
+    <button class="filter-pill" [class.active]="!activeCategory" (click)="filterByCategory('')">All</button>
+    <button class="filter-pill" *ngFor="let c of categories" [class.active]="activeCategory === c.slug"
+            (click)="filterByCategory(c.slug)">
+      {{ c.name }}
+    </button>
+  </div>
+
+  <p *ngIf="loading">Loading products...</p>
+  <p *ngIf="!loading && products.length === 0">No products found.</p>
+
+  <div class="product-grid">
+    <div class="product-card card" *ngFor="let p of products" [class.out-of-stock]="p.stock <= 0">
+      <a [routerLink]="['/product', p.slug]" class="product-img">
+        <span class="stock-badge out" *ngIf="p.stock <= 0">Out of Stock</span>
+        <span class="stock-badge low" *ngIf="p.stock > 0 && p.stock <= 5">Only {{ p.stock }} left</span>
+        <img [src]="p.image | imageUrl:'products'" [alt]="p.name" onerror="this.src='assets/images/placeholder.jpg'">
+      </a>
+      <a [routerLink]="['/product', p.slug]"><h4>{{ p.name }}</h4></a>
+      <small class="weight">{{ p.weight }}</small>
+      <div class="product-price">
+        <span class="price">₹{{ p.price }}</span>
+        <span class="mrp">₹{{ p.mrp }}</span>
+      </div>
+      <button class="btn btn-primary full-width" [disabled]="p.stock <= 0" (click)="addToCart(p)">
+        {{ p.stock <= 0 ? 'Out of Stock' : '🛒 Add to Cart' }}
+      </button>
+    </div>
+  </div>
+</section>

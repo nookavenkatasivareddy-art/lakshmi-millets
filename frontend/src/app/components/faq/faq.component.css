@@ -1,0 +1,7 @@
+.faq-hero { background: var(--green-light); padding: 50px 20px 40px; text-align: center; }
+.faq-hero .section-title { justify-content: center; }
+.faq-hero p { color: #55603f; }
+.faq-list { max-width: 900px; margin: 32px auto 55px; }
+.faq-card { margin: 12px 0; padding: 18px 20px; background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.faq-card summary { cursor: pointer; color: var(--green-dark); font-weight: 700; }
+.faq-card p { color: #555; line-height: 1.65; margin: 14px 0 2px; }

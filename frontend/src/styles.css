@@ -1,0 +1,113 @@
+:root {
+  --green-dark: #2f4a1f;
+  --green: #3c6b21;
+  --green-light: #e9f0e1;
+  --brown: #7a4a1e;
+  --cream: #faf6ee;
+  --text-dark: #23301a;
+  --white: #ffffff;
+  --danger: #c0392b;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', Arial, sans-serif;
+  color: var(--text-dark);
+  background: var(--cream);
+  overflow-x: hidden;
+  width: 100%;
+}
+
+img { max-width: 100%; height: auto; }
+
+h1, h2, h3 { font-family: 'Playfair Display', serif; margin: 0; }
+
+a { text-decoration: none; color: inherit; }
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* Base responsive type scale so headings never force horizontal scroll */
+h1 { font-size: clamp(22px, 5vw, 36px); }
+h2 { font-size: clamp(20px, 4vw, 30px); }
+h3 { font-size: clamp(17px, 3vw, 22px); }
+
+table { max-width: 100%; }
+
+/* Prevent any accidental fixed-width element from creating horizontal scroll */
+.container, section, main { max-width: 100%; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.btn-primary { background: var(--green); color: #fff; }
+.btn-primary:hover { background: var(--green-dark); }
+
+.btn-outline { background: transparent; border: 1.5px solid var(--green); color: var(--green); }
+.btn-outline:hover { background: var(--green-light); }
+
+.card {
+  background: var(--white);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d8d0c0;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+label { font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; }
+
+.form-group { margin-bottom: 14px; }
+
+.error-text { color: var(--danger); font-size: 13px; margin-top: 4px; }
+
+.section-title {
+  font-size: 28px;
+  color: var(--green-dark);
+  margin-bottom: 6px;
+}
+.section-title .highlight { color: var(--brown); }
+
+.price { font-weight: 700; color: var(--green-dark); }
+.mrp { text-decoration: line-through; color: #999; font-size: 13px; margin-left: 6px; }
+
+.badge {
+  background: var(--green-light);
+  color: var(--green-dark);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .section-title { font-size: 22px; }
+}
+
+@media (max-width: 420px) {
+  .container { padding: 0 14px; }
+  .btn { padding: 9px 16px; font-size: 13px; }
+}

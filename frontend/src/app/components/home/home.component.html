@@ -1,0 +1,81 @@
+<!-- HERO BANNER -->
+ <section class="hero-banner">
+  <div class="hero-content">
+    <h1>Eat Healthy,<br><span class="highlight">Live Healthy</span></h1>
+    <p class="desc">Lakshmi Millets brings you the goodness of traditional millets for a healthy tomorrow.</p>
+
+    <div class="badges">
+      <div class="badge">🌱 100% Natural</div>
+      <div class="badge">🌿 Rich in Nutrients</div>
+      <div class="badge">🚫 Gluten Free</div>
+      <div class="badge">❤️ Good for Heart</div>
+    </div>
+
+    <button class="btn-primary" routerLink="/products">Shop Now →</button>
+  </div>
+</section>
+
+<section>
+  <div class="hero-image">
+      <img src="assets/images/hero-millets.jpg" alt="Lakshmi Millets products" onerror="this.style.display='none'">
+    </div>
+</section>
+
+<!-- SCROLLING CATEGORY STRIP -->
+<section class="category-strip-section container" *ngIf="categories.length">
+  <div class="category-strip">
+    <div class="category-pill" *ngFor="let c of categories" (click)="goToCategory(c.slug)">
+      <div class="category-icon">
+        <img *ngIf="c.image" [src]="c.image | imageUrl:'categories'" [alt]="c.name" onerror="this.style.display='none'">
+        <span *ngIf="!c.image">{{ c.icon || '🌾' }}</span>
+      </div>
+      <span class="category-name">{{ c.name }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- POPULAR PRODUCTS -->
+<section class="popular-section container">
+  <div class="popular-header">
+    <h2 class="section-title">Our <span class="highlight">Popular</span> Products</h2>
+    <a routerLink="/products" class="btn btn-outline">View All Products →</a>
+  </div>
+
+  <div class="product-grid">
+    <div class="product-card card clickable" *ngFor="let p of popularProducts" (click)="goToProduct(p.slug)" [class.out-of-stock]="p.stock <= 0" tabindex="0" (keyup.enter)="goToProduct(p.slug)">
+      <div class="product-img">
+        <span class="stock-badge out" *ngIf="p.stock <= 0">Out of Stock</span>
+        <img [src]="p.image | imageUrl:'products'" [alt]="p.name" onerror="this.src='assets/images/placeholder.jpg'">
+      </div>
+      <h4>{{ p.name }}</h4>
+      <div class="product-price">
+        <span class="price">₹{{ p.price }}</span>
+        <span class="mrp">₹{{ p.mrp }}</span>
+      </div>
+      <button class="btn btn-primary full-width" [disabled]="p.stock <= 0" (click)="addToCart(p, $event)">
+        {{ p.stock <= 0 ? 'Out of Stock' : '🛒 Add to Cart' }}
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- RECIPES -->
+<section class="recipes-section container">
+  <h2 class="section-title">Tasty & Healthy <span class="highlight">Millet Recipes</span></h2>
+  <p>Delicious recipes made with millets for a healthy you and happy family.</p>
+  <div class="recipe-grid">
+    <div class="recipe-card" *ngFor="let r of recipes">
+        <img [src]="'assets/images/recipes/' + r.image" [alt]="r.name" onerror="this.src='assets/images/placeholder.jpg'">
+      <p>{{ r.name }}</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL SECTION -->
+<section class="testimonial-section">
+  <div class="testimonial-box">
+    <p class="testimonial-text">
+      "Unique Millets is a part of our daily life now. The quality is amazing and delivery is always on time."
+    </p>
+  </div>
+</section>

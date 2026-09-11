@@ -1,0 +1,134 @@
+.highlight { color: var(--brown); }
+
+.contact-hero {
+  background: var(--green-light);
+  padding: 50px 20px 40px;
+  text-align: center;
+}
+.contact-hero .section-title {
+  font-size: 32px;
+  justify-content: center;
+}
+.hero-sub {
+  max-width: 600px;
+  margin: 10px auto 0;
+  color: #55603f;
+  font-size: 15px;
+}
+
+.contact-page {
+  padding: 50px 20px 70px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 30px;
+  align-items: start;
+}
+
+/* Info cards */
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.info-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  border-left: 3px solid var(--green);
+}
+
+.info-icon { font-size: 22px; }
+
+.info-card h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--green-dark);
+  font-family: 'Poppins', sans-serif;
+}
+
+.info-card p,
+.info-card a {
+  margin: 0;
+  font-size: 13.5px;
+  color: #5c5c5c;
+}
+
+.info-card a:hover { color: var(--green); }
+
+/* Contact form */
+.contact-form-wrap {
+  padding: 28px 30px;
+}
+
+.contact-form-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--green-dark);
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.contact-form-wrap form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.contact-form-wrap label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  color: #444;
+  font-weight: 500;
+}
+
+.contact-form-wrap input,
+.contact-form-wrap textarea {
+  padding: 10px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Poppins', Arial, sans-serif;
+  font-size: 14px;
+  resize: vertical;
+}
+
+.contact-form-wrap input:focus,
+.contact-form-wrap textarea:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+.contact-form-wrap button {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.contact-form-wrap button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.success-msg {
+  background: var(--green-light);
+  color: var(--green-dark);
+  padding: 16px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+@media (max-width: 800px) {
+  .contact-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .contact-hero .section-title { font-size: 24px; }
+  .contact-form-wrap { padding: 22px 18px; }
+}

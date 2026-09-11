@@ -1,0 +1,7 @@
+server.js OK
+routes\orders.js OK
+routes\payment.js OK
+config\db.js OK
+middleware\auth.js OK
+models\Order.js OK
+models\User.js OK

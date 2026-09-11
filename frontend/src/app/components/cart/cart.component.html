@@ -1,0 +1,35 @@
+<section class="container cart-page">
+  <h2 class="section-title">Your <span class="highlight">Cart</span></h2>
+
+  <div *ngIf="items.length === 0" class="empty-cart">
+    <p>Your cart is empty.</p>
+    <a routerLink="/products" class="btn btn-primary">Shop Millets</a>
+  </div>
+
+  <div *ngIf="items.length > 0" class="cart-grid">
+    <div class="cart-items">
+      <div class="cart-item card" *ngFor="let item of items">
+        <img [src]="item.image | imageUrl:'products'" [alt]="item.name" onerror="this.src='assets/images/placeholder.jpg'">
+        <div class="item-info">
+          <h4>{{ item.name }}</h4>
+          <span class="price">₹{{ item.price }}</span>
+        </div>
+        <div class="qty-selector">
+          <button (click)="updateQty(item, -1)">−</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="updateQty(item, 1)">+</button>
+        </div>
+        <div class="item-total">₹{{ item.price * item.quantity }}</div>
+        <button class="remove-btn" (click)="remove(item)">✕</button>
+      </div>
+    </div>
+
+    <div class="cart-summary card">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Items Total</span><span>₹{{ total }}</span></div>
+      <div class="summary-row"><span>Delivery</span><span>Calculated at checkout</span></div>
+      <hr>
+      <button class="btn btn-primary" (click)="proceedToCheckout()">Buy Now →</button>
+    </div>
+  </div>
+</section>
