@@ -26,14 +26,20 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Nested git repo / scratch push copy
+# Scratch push copies / old snapshots - DO NOT bulk-copy over src (regresses fixes)
 _backend_push/
-# Old fix snapshots - DO NOT bulk-copy over src (regresses fixes)
 EC2FIX/
 
-# Temp
+# Temp scratch files
 build-result.txt
 build-final.txt
 build-verify.txt
 git-state.txt
 EC2-FIX-PACK.txt
+check-result.txt
+
+# Local installers / big binaries - NEVER push (GitHub blocks files >100MB)
+*.msi
+*.exe
+*.zip
+*.pem
