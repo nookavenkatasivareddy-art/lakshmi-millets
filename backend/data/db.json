@@ -708,7 +708,7 @@
       "id": "d-02",
       "city": "Bangalore",
       "state": "Karnataka",
-      "deliveryCharge": 60,
+      "deliveryCharge": 0,
       "freeDeliveryAbove": 499,
       "estimatedDays": "2-3 days",
       "isActive": true
@@ -717,7 +717,7 @@
       "id": "d-03",
       "city": "Chennai",
       "state": "Tamil Nadu",
-      "deliveryCharge": 60,
+      "deliveryCharge": 0,
       "freeDeliveryAbove": 499,
       "estimatedDays": "2-3 days",
       "isActive": true

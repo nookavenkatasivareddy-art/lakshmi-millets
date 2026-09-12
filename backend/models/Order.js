@@ -26,8 +26,16 @@ const orderSchema = new mongoose.Schema(
     gstAmount: { type: Number, default: 0 },
     grandTotal: { type: Number, required: true },
     paymentMethod: { type: String, enum: ['COD', 'CARD', 'UPI', 'NETBANKING'], required: true },
-    paymentStatus: { type: String, enum: ['PENDING', 'PAID', 'FAILED'], default: 'PENDING' },
+    paymentStatus: { type: String, enum: ['PENDING', 'PAID', 'FAILED', 'VERIFICATION_PENDING'], default: 'PENDING' },
     paymentId: { type: String, default: null },
+    paymentDetails: {
+      upiId: String,
+      upiLink: String,
+      utr: String,
+      screenshot: String,
+      verifiedAt: Date,
+      verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+    },
     orderStatus: {
       type: String,
       enum: ['PLACED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'CLOSED'],
