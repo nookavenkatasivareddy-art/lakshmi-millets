@@ -1,0 +1,45 @@
+<section class="container settings-page">
+  <h2 class="section-title">Admin <span class="highlight">Settings</span></h2>
+
+  <!-- Password protection gate -->
+  <div *ngIf="!isAuthenticated" class="password-gate">
+    <div class="gate-box">
+      <h3>🔒 Admin Settings — Password Required</h3>
+      <p class="gate-desc">Enter the admin password to manage delivery charges and settings.</p>
+      <input type="password" [(ngModel)]="passwordInput" (keyup.enter)="authenticate()" placeholder="Enter admin password" class="gate-input" />
+      <div *ngIf="errorMsg" class="error-text">{{ errorMsg }}</div>
+      <button class="btn btn-primary" (click)="authenticate()">Unlock</button>
+    </div>
+  </div>
+
+  <!-- Settings panel -->
+  <div *ngIf="isAuthenticated" class="settings-panel">
+    <div class="settings-header">
+      <h3>🚚 Delivery Charges</h3>
+      <button class="btn btn-outline small" (click)="logout()">Lock</button>
+    </div>
+
+    <p *ngIf="loading">Loading locations...</p>
+
+    <div class="location-card card" *ngFor="let loc of locations">
+      <div class="loc-info">
+        <b>{{ loc.city }}, {{ loc.state }}</b>
+        <small>Estimated: {{ loc.estimatedDays || '1-2 days' }}</small>
+      </div>
+      <div class="loc-controls">
+        <label>Delivery Charge (₹)
+          <input type="number" [(ngModel)]="loc.deliveryCharge" (change)="updateDeliveryCharge(loc)" min="0" />
+        </label>
+        <label>Free Delivery Above (₹)
+          <input type="number" [(ngModel)]="loc.freeDeliveryAbove" (change)="updateDeliveryCharge(loc)" min="0" />
+        </label>
+      </div>
+      <div class="loc-actions">
+        <span class="toggle-label">Active</span>
+        <input type="checkbox" [(ngModel)]="loc.isActive" (change)="updateDeliveryCharge(loc)" />
+      </div>
+    </div>
+
+    <p *ngIf="!loading && locations.length === 0">No delivery locations found.</p>
+  </div>
+</section>

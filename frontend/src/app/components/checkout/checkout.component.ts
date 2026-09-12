@@ -20,24 +20,26 @@ export class CheckoutComponent implements OnInit {
   selectedAddressId = '';
   showNewAddressForm = false;
   defaultLocationId = '';
-  paymentMethod: 'COD' | 'CARD' | 'UPI' | 'NETBANKING' = 'COD';
+  paymentMethod: 'COD' | 'UPI' | 'CARD' | 'NETBANKING' = 'COD';
   placing = false;
   errorMsg = '';
 
   selectedUpiApp = '';
   showPaymentLinkModal = false;
+  showPaymentVerificationModal = false;
+  placedOrderId = '';
+  verificationUtr = '';
+  verificationScreenshot = '';
 
   upiApps = [
+    { id: 'phonepay', name: 'PhonePe', short: 'P', color: '#602697' },
     { id: 'paytm', name: 'Paytm', short: 'P', color: '#00baf2' },
+    { id: 'gpay', name: 'Google Pay', short: 'G', color: '#42853B' },
     { id: 'amazonpay', name: 'Amazon Pay', short: 'a', color: '#232f3e' },
     { id: 'bhim', name: 'BHIM App', short: 'B', color: '#ee6723' },
     { id: 'cred', name: 'CRED UPI', short: 'C', color: '#0b0b0b' },
     { id: 'kiwi', name: 'Kiwi UPI', short: 'K', color: '#6fce44' },
-    { id: 'other', name: 'Other UPI Apps', short: '➤', color: '#f0a500' },
-    { id: 'supermoney', name: 'Super Money', short: 'S', color: '#4d3df7' },
     { id: 'airtel', name: 'Airtel Payments Bank UPI', short: 'A', color: '#e40000' },
-    { id: 'pop', name: 'POP UPI', short: 'pop', color: '#111111' },
-    { id: 'navi', name: 'Navi UPI', short: 'n', color: '#3c1f8b' },
     { id: 'fampay', name: 'FamPay', short: 'F', color: '#ff8a00' }
   ];
 
@@ -128,7 +130,6 @@ export class CheckoutComponent implements OnInit {
     return addr.id || addr._id || '';
   }
 
-  /** True when the user typed anything into the new-address form. */
   private hasTypedAddressInput(): boolean {
     if (this.showNewAddressForm) return true;
     const v = this.addressForm.value || {};
@@ -136,7 +137,6 @@ export class CheckoutComponent implements OnInit {
       .some(k => String(v[k] || '').trim().length > 0);
   }
 
-  /** Human-readable first validation problem, or null when valid. */
   private describeAddressProblem(v: any): string | null {
     if (!String(v.fullName || '').trim()) return 'full name required';
     if (!/^[0-9]{10}$/.test(String(v.phone || '').trim())) return 'phone must be 10 digits';
@@ -174,9 +174,6 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     let shippingAddress: any;
 
-    // New typed address always wins when its form is open or has any input.
-    // (Old logic trusted selectedAddressId blindly and ignored a freshly
-    // typed address, so users kept seeing "Please add a delivery address".)
     const typedAddress = this.hasTypedAddressInput() ? { ...this.addressForm.value } : null;
     const typedAddressError = typedAddress ? this.describeAddressProblem(typedAddress) : null;
 
@@ -189,11 +186,9 @@ export class CheckoutComponent implements OnInit {
         this.errorMsg = 'Please select a delivery address';
         return;
       }
-      // Send only backend-expected address fields (strip id/_id/isDefault).
       const { fullName, phone, line1, line2, city, state, pincode } = addr;
       shippingAddress = { fullName, phone, line1, line2, city, state, pincode };
       if (typedAddressError) {
-        // Typed form was started but is incomplete - tell the user exactly what is missing.
         this.addressForm.markAllAsTouched();
         this.errorMsg = `New address incomplete (${typedAddressError}). Fix it or clear the form to use the saved address.`;
         return;
@@ -221,41 +216,46 @@ export class CheckoutComponent implements OnInit {
         paymentMethod: this.paymentMethod,
         paymentId
       };
-      // Backend treats empty-string location as invalid ObjectId - omit it.
       if (this.defaultLocationId) {
         payload.deliveryLocationId = this.defaultLocationId;
       }
-      console.log('[checkout] placing order', payload);
       this.orderService.placeOrder(payload).subscribe({
         next: (order) => {
           this.cart.clearCart();
           this.placing = false;
-          console.log('[checkout] order placed', order);
-          // Open admin WhatsApp with full order details (customer confirms send).
+          this.placedOrderId = order?.id || order?._id || '';
+
+          // Send order details to admin WhatsApp
           try {
             this.whatsapp.sendCheckoutOrder({
-              orderId: order?.id || order?._id || '',
+              orderId: this.placedOrderId,
               items,
               itemsTotal: this.itemsTotal,
               deliveryCharge: this.deliveryCharge,
               grandTotal: this.grandTotal,
               shippingAddress,
-              paymentMethod: this.paymentMethod
+              paymentMethod: this.paymentMethod,
+              upiLink: order?.paymentDetails?.upiLink,
+              upiId: order?.paymentDetails?.upiId
             });
           } catch (e) {
             console.warn('[checkout] whatsapp open failed', e);
           }
-          this.router.navigate(['/orders'], { state: { placedOrderId: order?.id || order?._id } });
+
+          if (this.paymentMethod === 'UPI') {
+            this.showPaymentVerificationModal = true;
+          } else {
+            this.router.navigate(['/orders'], { state: { placedOrderId: this.placedOrderId } });
+          }
         },
         error: (err) => {
           this.placing = false;
-          console.error('[checkout] place order failed', err);
-          this.errorMsg = err.error?.message || `Failed to place order (${err.status || 'network'}). Check backend /api/orders.`;
+          this.errorMsg = err.error?.message || `Failed to place order (${err.status || 'network'}).`;
         }
       });
     };
 
-    if (this.paymentMethod === 'COD') {
+    if (this.paymentMethod === 'COD' || this.paymentMethod === 'UPI') {
       finish();
     } else {
       this.paymentService.createPayment(this.grandTotal, this.paymentMethod).subscribe({
@@ -268,5 +268,30 @@ export class CheckoutComponent implements OnInit {
         error: () => { this.placing = false; this.errorMsg = 'Could not initiate payment'; }
       });
     }
+  }
+
+  /** Customer submits payment proof (screenshot + UTR) for UPI orders */
+  submitPaymentVerification(utr: string, screenshot: string) {
+    if (!utr || !screenshot) {
+      this.errorMsg = 'Please provide both UTR and screenshot';
+      return;
+    }
+
+    this.orderService.submitPaymentVerification(this.placedOrderId, utr, screenshot).subscribe({
+      next: () => {
+        this.showPaymentVerificationModal = false;
+        this.whatsapp.sendPaymentVerification(
+          this.placedOrderId,
+          utr,
+          screenshot,
+          this.grandTotal,
+          this.addressForm.value
+        );
+        this.router.navigate(['/orders'], { state: { placedOrderId: this.placedOrderId } });
+      },
+      error: (err) => {
+        this.errorMsg = err.error?.message || 'Failed to submit payment verification';
+      }
+    });
   }
 }

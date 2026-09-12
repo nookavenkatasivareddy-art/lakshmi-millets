@@ -1,5 +1,8 @@
 <section class="container orders-page">
-  <h2 class="section-title">Admin <span class="highlight">Orders</span></h2>
+  <div class="orders-header">
+    <h2 class="section-title">Admin <span class="highlight">Orders</span></h2>
+    <a routerLink="/admin/settings" class="btn btn-outline small">⚙ Settings</a>
+  </div>
 
   <p *ngIf="loading">Loading orders...</p>
   <p *ngIf="!loading && errorMsg" class="error-text">{{ errorMsg }}</p>
@@ -26,9 +29,11 @@
       <span class="total">Total: ₹{{ order.grandTotal }} ({{ order.paymentMethod }} / {{ order.paymentStatus }})</span>
     </div>
 
-    <div class="admin-actions">
+      <div class="admin-actions">
       <button class="btn btn-primary small" (click)="openDetails(order)">🛒 Order Details</button>
       <button class="btn btn-outline small" (click)="openCustomerWhatsApp(order)">WhatsApp customer</button>
+      <span *ngIf="isUpiAwaitingAdmin(order)" class="status-badge pending-verify">⚠ Verify Payment</span>
+      <span *ngIf="isUpiPendingVerification(order)" class="status-badge awaiting-proof">⏳ Waiting for Proof</span>
     </div>
   </div>
 </section>
@@ -82,6 +87,21 @@
         <div><small>Payment Method:</small> {{ selected.paymentMethod }}</div>
         <div>Payment Status: <span class="pay-badge" [class.paid]="selected.paymentStatus === 'PAID'">{{ selected.paymentStatus }}</span></div>
         <div class="txn"><small>Transaction ID:</small> {{ selected.paymentId || '-' }}</div>
+        <div *ngIf="selected.paymentDetails?.utr"><small>UTR:</small> {{ selected.paymentDetails?.utr || '-' }}</div>
+        <div *ngIf="selected.paymentDetails?.screenshot"><small>Screenshot:</small> <a [href]="selected.paymentDetails?.screenshot" target="_blank">View</a></div>
+
+        <!-- UPI payment verification buttons -->
+        <div *ngIf="selected.paymentMethod === 'UPI' && selected.paymentStatus === 'VERIFICATION_PENDING'" class="payment-verify-actions">
+          <small>Verify payment proof (UTR + screenshot): </small>
+          <button class="btn btn-success small" (click)="verifyPayment(true)" [disabled]="updatingModal">✅ Verify & Confirm</button>
+          <button class="btn btn-outline small" (click)="verifyPayment(false)" [disabled]="updatingModal">❌ Reject</button>
+        </div>
+
+        <!-- UPI payment link for sharing -->
+        <div *ngIf="selected.paymentDetails?.upiLink" class="upi-link-box">
+          <small>UPI Payment Link:</small>
+          <a [href]="selected.paymentDetails.upiLink" target="_blank">Open UPI Link</a>
+        </div>
       </div>
 
       <h4 class="m-title">🔄 Order Status</h4>

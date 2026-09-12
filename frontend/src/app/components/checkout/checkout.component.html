@@ -159,3 +159,42 @@
     <p class="expiry-note">The link will expire in 20 minutes</p>
   </div>
 </div>
+
+<!-- PAYMENT VERIFICATION MODAL (UPI after payment) -->
+<div class="sheet-backdrop" *ngIf="showPaymentVerificationModal" (click)="showPaymentVerificationModal = false">
+  <div class="sheet-panel" (click)="$event.stopPropagation()">
+    <button class="sheet-close" (click)="showPaymentVerificationModal = false">✕</button>
+
+    <h3 class="sheet-title">UPI Payment</h3>
+
+    <div class="sheet-step">
+      <div class="step-icon green">📱</div>
+      <div>
+        <b>Complete the payment</b>
+        <p>Open any UPI app and pay ₹{{ grandTotal }} to 8897626612&#64;sbi</p>
+      </div>
+    </div>
+
+    <div class="qr-info" *ngIf="false">
+      <p>Scan the QR code or tap the UPI link</p>
+    </div>
+
+    <div class="sheet-step">
+      <div class="step-icon orange">📸</div>
+      <div>
+        <b>Upload payment proof</b>
+        <p>Enter UTR and upload screenshot of the completed transaction</p>
+      </div>
+    </div>
+
+    <div class="verification-form">
+      <label>UTR Number</label>
+      <input type="text" placeholder="Enter UTR / Transaction ID" [(ngModel)]="verificationUtr" />
+      <label>Screenshot URL</label>
+      <input type="text" placeholder="Paste screenshot URL or upload" [(ngModel)]="verificationScreenshot" />
+    </div>
+
+    <button class="btn btn-primary full-width" (click)="submitPaymentVerification(verificationUtr, verificationScreenshot)">Submit for Verification</button>
+    <p class="hint">You can also share the screenshot on WhatsApp to 8897626612.</p>
+  </div>
+</div>

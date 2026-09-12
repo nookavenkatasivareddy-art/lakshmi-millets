@@ -15,4 +15,16 @@ export class DeliveryService {
       tap(locs => { this.locations = locs; })
     );
   }
+
+  getAllLocations(): Observable<DeliveryLocation[]> {
+    return this.http.get<DeliveryLocation[]>(`${API_BASE_URL}/delivery-locations/all`);
+  }
+
+  updateLocation(id: string, data: Partial<DeliveryLocation>): Observable<DeliveryLocation> {
+    return this.http.patch<DeliveryLocation>(`${API_BASE_URL}/delivery-locations/${id}`, data);
+  }
+
+  createLocation(data: any): Observable<DeliveryLocation> {
+    return this.http.post<DeliveryLocation>(`${API_BASE_URL}/delivery-locations`, data);
+  }
 }

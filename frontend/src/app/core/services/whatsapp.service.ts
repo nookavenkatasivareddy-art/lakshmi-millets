@@ -17,6 +17,8 @@ export interface CheckoutOrderDetails {
     pincode: string;
   };
   paymentMethod: string;
+  upiLink?: string;
+  upiId?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -54,6 +56,14 @@ export class WhatsappService {
     const lines = details.items
       .map(i => `${i.quantity}x ${i.name}${(i as any).weight ? ' (' + (i as any).weight + ')' : ''}`)
       .join('\n');
+    let paymentInfo = `Payment: ${details.paymentMethod}\n`;
+    
+    if (details.paymentMethod === 'UPI' && details.upiLink) {
+      paymentInfo += `UPI Link: ${details.upiLink}\n`;
+      paymentInfo += `UPI ID: ${details.upiId || '8897626612@sbi'}\n`;
+      paymentInfo += `\nPlease pay using the UPI link above and send screenshot + UTR in the app.`;
+    }
+    
     const message =
       `🔔 New Food Order Received!\n\n` +
       `Order ID: ${id}\n` +
@@ -61,8 +71,25 @@ export class WhatsappService {
       `Phone: ${a.phone}\n\n` +
       `Items:\n${lines}\n\n` +
       `Total: Rs.${Number(details.grandTotal).toFixed(2)}\n` +
-      `Payment: ${details.paymentMethod}\n\n` +
+      `${paymentInfo}\n` +
       `Please check the admin panel for complete order details.`;
+    this.openWhatsApp(message);
+  }
+
+  /**
+   * Opens WhatsApp with payment verification submission (screenshot + UTR)
+   */
+  sendPaymentVerification(orderId: string, utr: string, screenshot: string, grandTotal: number, shippingAddress: any): void {
+    const id = '#' + orderId.slice(-8).toUpperCase();
+    const message =
+      `💰 Payment Verification Submitted!\n\n` +
+      `Order ID: ${id}\n` +
+      `Customer: ${shippingAddress.fullName}\n` +
+      `Phone: ${shippingAddress.phone}\n\n` +
+      `Amount: Rs.${Number(grandTotal).toFixed(2)}\n` +
+      `UTR: ${utr}\n` +
+      `Screenshot: Attached\n\n` +
+      `Please verify in admin panel.`;
     this.openWhatsApp(message);
   }
 

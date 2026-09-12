@@ -35,4 +35,16 @@ export class OrderService {
     if (paymentStatus) body.paymentStatus = paymentStatus;
     return this.http.patch(`${API_BASE_URL}/orders/${id}/status`, body);
   }
+
+  /** Customer: submit payment proof (UTR + screenshot) for UPI orders */
+  submitPaymentVerification(orderId: string, utr: string, screenshot: string): Observable<any> {
+    return this.http.post(`${API_BASE_URL}/orders/${orderId}/payment-verification`, { utr, screenshot });
+  }
+
+  /** Admin: verify UPI payment (approve or reject) */
+  verifyPayment(orderId: string, verified: boolean, utr?: string): Observable<any> {
+    const body: any = { verified };
+    if (utr) body.utr = utr;
+    return this.http.patch(`${API_BASE_URL}/orders/${orderId}/verify-payment`, body);
+  }
 }

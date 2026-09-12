@@ -149,10 +149,47 @@ export class AdminOrdersComponent implements OnInit {
     w.print();
   }
 
+  /** Verify or reject payment for UPI orders */
+  verifyPayment(approved: boolean): void {
+    if (!this.selected) return;
+    const id = this.orderId(this.selected);
+    this.updatingModal = true;
+    this.modalMsg = '';
+    this.orderService.verifyPayment(id, approved, this.selected.paymentDetails?.utr).subscribe({
+      next: (updated) => {
+        this.updatingModal = false;
+        const idx = this.orders.findIndex(o => this.orderId(o) === id);
+        if (idx >= 0) this.orders[idx] = updated;
+        this.selected = updated;
+        this.modalOk = true;
+        if (approved) {
+          this.modalMsg = 'Payment verified! Order confirmed and customer will be notified.';
+        } else {
+          this.modalMsg = 'Payment rejected. Customer notified to resubmit.';
+        }
+      },
+      error: (err) => {
+        this.updatingModal = false;
+        this.modalOk = false;
+        this.modalMsg = err.error?.message || 'Failed to verify payment';
+      }
+    });
+  }
+
   openCustomerWhatsApp(order: any) {
     const phone = String(order?.shippingAddress?.phone || '').replace(/\D/g, '');
     if (!phone) return;
     const msg = `Hi ${this.customerName(order)}, this is Lakshmi Millets. Your order #${this.orderLabel(order)} is now ${order.orderStatus}.`;
     window.open(`https://wa.me/91${phone.slice(-10)}?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  /** Returns true if order has UPI payment verification pending */
+  isUpiPendingVerification(order: any): boolean {
+    return order.paymentMethod === 'UPI' && order.paymentStatus === 'VERIFICATION_PENDING' && !order.paymentDetails?.utr;
+  }
+
+  /** Returns true if order has UPI payment verification submitted and awaiting admin review */
+  isUpiAwaitingAdmin(order: any): boolean {
+    return order.paymentMethod === 'UPI' && order.paymentStatus === 'VERIFICATION_PENDING' && !!order.paymentDetails?.utr;
   }
 }

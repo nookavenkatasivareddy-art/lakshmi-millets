@@ -16,6 +16,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
+import { AdminSettingsComponent } from './components/admin-settings/admin-settings.component';
 
 import { AuthComponent } from './components/auth/auth.component';
 import { BenefitsComponent } from './components/benefits/benefits.component';
@@ -40,6 +41,7 @@ import { ImageUrlPipe } from './core/pipes/image-url.pipe';
     CheckoutComponent,
     OrdersComponent,
     AdminOrdersComponent,
+    AdminSettingsComponent,
     AuthComponent,
     BenefitsComponent,
     AboutComponent,

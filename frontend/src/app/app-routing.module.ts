@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
+import { AdminSettingsComponent } from './components/admin-settings/admin-settings.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
   { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AdminGuard] },
+  { path: 'admin/settings', component: AdminSettingsComponent, canActivate: [AdminGuard] },
   { path: '**', redirectTo: '' }
 ];
 

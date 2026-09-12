@@ -189,6 +189,8 @@
 }
 .step-icon.blue { background: #0a66c2; color: #fff; }
 .step-icon.outline { background: #eef2fb; color: #0a66c2; border: 2px solid #b9cdf2; }
+.step-icon.green { background: #2e7d32; color: #fff; }
+.step-icon.orange { background: #e65100; color: #fff; }
 .sheet-step b { display: block; font-size: 15px; margin-bottom: 3px; color: var(--text-dark); }
 .sheet-step p { font-size: 13px; color: #777; margin: 0; line-height: 1.4; }
 
@@ -216,3 +218,9 @@
 @media (max-width: 500px) {
   .upi-app-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== Payment Verification Modal ===== */
+.verification-form { display: flex; flex-direction: column; gap: 14px; margin: 8px 0; }
+.verification-form label { font-size: 13px; font-weight: 600; color: #555; }
+.verification-form input { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+.qr-info { background: #f6f8f6; padding: 12px; border-radius: 8px; margin: 14px 0; font-size: 13px; color: #555; }

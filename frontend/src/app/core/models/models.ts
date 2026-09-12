@@ -29,6 +29,7 @@ export interface DeliveryLocation {
   deliveryCharge: number;
   freeDeliveryAbove: number;
   estimatedDays: string;
+  isActive?: boolean;
 }
 
 export interface CartItem {
