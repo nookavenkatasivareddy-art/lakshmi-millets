@@ -20,6 +20,16 @@ import { ReturnPolicyComponent } from './components/return-policy/return-policy.
 import { AuthGuard } from './core/guards/auth.guard';
 import { AdminGuard } from './core/guards/admin.guard';
 
+import { AdminLayoutComponent } from './components/admin-layout/admin-layout.component';
+import { DashboardOverviewComponent } from './components/dashboard-overview/dashboard-overview.component';
+import { AdminProductsComponent } from './components/admin-products/admin-products.component';
+import { AdminCategoriesComponent } from './components/admin-categories/admin-categories.component';
+import { AdminInvoicesComponent } from './components/admin-invoices/admin-invoices.component';
+import { AdminUsersComponent } from './components/admin-users/admin-users.component';
+import { AdminMessagesComponent } from './components/admin-messages/admin-messages.component';
+import { AdminNotificationsComponent } from './components/admin-notifications/admin-notifications.component';
+import { AdminReviewsComponent } from './components/admin-reviews/admin-reviews.component';
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: AuthComponent, data: { mode: 'login' } },
@@ -37,8 +47,22 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
-  { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AdminGuard] },
-  { path: 'admin/settings', component: AdminSettingsComponent, canActivate: [AdminGuard] },
+
+  // Admin routes with layout wrapper
+  { path: 'admin', component: AdminLayoutComponent, canActivate: [AdminGuard], children: [
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: 'dashboard', component: DashboardOverviewComponent },
+    { path: 'orders', component: AdminOrdersComponent },
+    { path: 'products', component: AdminProductsComponent },
+    { path: 'categories', component: AdminCategoriesComponent },
+    { path: 'invoices', component: AdminInvoicesComponent },
+    { path: 'users', component: AdminUsersComponent },
+    { path: 'messages', component: AdminMessagesComponent },
+    { path: 'notifications', component: AdminNotificationsComponent },
+    { path: 'reviews', component: AdminReviewsComponent },
+    { path: 'settings', component: AdminSettingsComponent }
+  ]},
+
   { path: '**', redirectTo: '' }
 ];
 

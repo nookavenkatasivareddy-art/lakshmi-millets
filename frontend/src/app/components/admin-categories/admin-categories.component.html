@@ -1,0 +1,42 @@
+<div class="admin-page">
+  <div class="admin-page-header">
+    <h2>Categories</h2>
+    <button class="btn btn-primary" (click)="openAddForm()">+ Add Category</button>
+  </div>
+
+  <div *ngIf="showAddForm" class="form-card card">
+    <h3>{{ editId ? 'Edit' : 'Add' }} Category</h3>
+    <div class="form-grid">
+      <div class="form-group"><label>Name *</label><input [(ngModel)]="categoryForm.name" placeholder="Category name"></div>
+      <div class="form-group"><label>Description</label><textarea [(ngModel)]="categoryForm.description" rows="2" placeholder="Description"></textarea></div>
+      <div class="form-group"><label>Icon</label><input [(ngModel)]="categoryForm.icon" placeholder="Icon name"></div>
+      <div class="form-group"><label>Image URL</label><input [(ngModel)]="categoryForm.image" placeholder="/uploads/categories/image.jpg"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" (click)="saveCategory()">{{ editId ? 'Update' : 'Save' }}</button>
+      <button class="btn btn-outline" (click)="closeForm()">Cancel</button>
+    </div>
+  </div>
+
+  <p *ngIf="loading">Loading categories...</p>
+  <p *ngIf="!loading && errorMsg" class="error-text">{{ errorMsg }}</p>
+
+  <div *ngIf="!loading && categories.length" class="table-wrapper">
+    <table class="admin-table">
+      <thead><tr><th>Name</th><th>Description</th><th>Products Count</th><th>Actions</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let c of categories">
+          <td><b>{{ c.name }}</b></td>
+          <td>{{ c.description || '-' }}</td>
+          <td><span class="badge">{{ getProductCount(c) }}</span></td>
+          <td>
+            <button class="btn btn-outline tiny" (click)="editCategory(c)">Edit</button>
+            <button class="btn btn-outline tiny danger" (click)="deleteCategory(c)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && !categories.length && !errorMsg" class="empty-state card">No categories found.</div>
+</div>

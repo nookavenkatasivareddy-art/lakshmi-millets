@@ -58,6 +58,8 @@ router.get('/', async (req, res) => {
     if (inStock === 'true') {
       filter.stock = { $gt: 0 };
     }
+    // Admin can disable a product from the dashboard; hide those on the shop
+    filter.isActive = { $ne: false };
 
     const products = await Product.find(filter);
     const shaped = await Promise.all(products.map(attachCategory));
@@ -148,6 +150,7 @@ router.put('/:id', protect, adminOnly, async (req, res) => {
     if (description !== undefined) product.description = description;
     if (stock !== undefined) product.stock = Math.max(0, stock);
     if (isPopular !== undefined) product.isPopular = !!isPopular;
+    if (req.body.isActive !== undefined) product.isActive = !!req.body.isActive;
 
     await product.save();
     res.json(await attachCategory(product));
@@ -192,6 +195,54 @@ router.delete('/:id', protect, adminOnly, async (req, res) => {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
     res.json({ message: 'Product deleted', id: req.params.id });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET /api/products/:slug/reviews - public reviews for a product
+router.get('/:slug/reviews', async (req, res) => {
+  try {
+    const product = await Product.findOne({ slug: req.params.slug });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    const reviews = await Review.find({ productId: product.id })
+      .sort({ createdAt: -1 })
+      .limit(100);
+    const total = reviews.length;
+    const average = total
+      ? Math.round((reviews.reduce((s, r) => s + (r.rating || 0), 0) / total) * 10) / 10
+      : 0;
+    res.json({ total, average, reviews });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// POST /api/products/:slug/reviews - public: leave a review
+router.post('/:slug/reviews', async (req, res) => {
+  try {
+    const product = await Product.findOne({ slug: req.params.slug });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+
+    const rating = parseInt(req.body.rating, 10);
+    const comment = (req.body.comment || '').trim();
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Please choose a rating from 1 to 5 stars' });
+    }
+    if (!comment) {
+      return res.status(400).json({ message: 'Please write a short review' });
+    }
+
+    const review = await Review.create({
+      productId: product.id,
+      productName: product.name,
+      userName: (req.body.userName || 'Customer').trim() || 'Customer',
+      rating,
+      comment
+    });
+
+    res.status(201).json({ message: 'Review submitted. Thank you!', review });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

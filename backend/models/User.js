@@ -30,7 +30,9 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     password: { type: String, required: true }, // bcrypt hash, never sent back unhashed
     role: { type: String, enum: ['customer', 'admin'], default: 'customer' },
-    addresses: [addressSchema]
+    addresses: [addressSchema],
+    status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+    blocked: { type: Boolean, default: false }
   },
   { timestamps: { createdAt: 'createdAt', updatedAt: false } }
 );

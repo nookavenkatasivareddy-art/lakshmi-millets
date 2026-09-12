@@ -1,0 +1,10 @@
+.admin-page { padding: 0; }
+.admin-page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.admin-page-header h2 { color: var(--green-dark); margin: 0; }
+.form-card { padding: 20px; margin-bottom: 20px; }
+.form-card h3 { margin-top: 0; color: var(--green-dark); }
+.form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.form-actions { display: flex; gap: 10px; margin-top: 14px; }
+.badge { background: var(--green-light); color: var(--green-dark); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.danger { color: var(--danger); border-color: var(--danger); }
+.danger:hover { background: #ffebee; }

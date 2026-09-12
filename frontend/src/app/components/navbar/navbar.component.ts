@@ -14,6 +14,7 @@ export class NavbarComponent implements OnInit {
   categories: Category[] = [];
   cartCount = 0;
   currentUser: AuthUser | null = null;
+  isAdmin = false;
 
   searchTerm = '';
   showSearch = false;
@@ -48,7 +49,10 @@ export class NavbarComponent implements OnInit {
     this.cart.items$.subscribe(items => {
       this.cartCount = items.reduce((s, i) => s + i.quantity, 0);
     });
-    this.auth.currentUser$.subscribe(u => (this.currentUser = u));
+    this.auth.currentUser$.subscribe(u => {
+      this.currentUser = u;
+      this.isAdmin = !!u && u.role === 'admin';
+    });
   }
 
   toggleSearch() {

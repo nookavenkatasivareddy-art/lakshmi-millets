@@ -4,6 +4,7 @@ const Product = require('../models/Product');
 const DeliveryLocation = require('../models/DeliveryLocation');
 const { protect, adminOnly } = require('../middleware/auth');
 const whatsapp = require('../services/whatsapp');
+const notify = require('../services/notify');
 const router = express.Router();
 
 const UPI_ID = process.env.UPI_ID || '8897626612@sbi';
@@ -114,10 +115,21 @@ router.post('/', protect, async (req, res) => {
     for (const { product, qty } of productsToDecrement) {
       product.stock = Math.max(0, product.stock - qty);
       await product.save();
+      notify.checkLowStock(product);
     }
 
     // Notify admin on WhatsApp about new order
     whatsapp.notifyAdminNewOrder(order).catch(() => {});
+
+    // Dashboard notification: new order received
+    notify.createNotification({
+      type: 'new_order',
+      title: 'New order received',
+      message: `Order #${String(order.id).slice(-8).toUpperCase()} from ${shippingAddress.fullName || 'a customer'} — ₹${grandTotal.toFixed(0)} (${paymentMethod})`,
+      orderId: order.id,
+      userId: req.user.id,
+      link: '/admin/orders'
+    });
 
     res.status(201).json(await attachDeliveryLocation(order));
   } catch (err) {
@@ -182,10 +194,30 @@ router.patch('/:id/status', protect, adminOnly, async (req, res) => {
     if (!order) return res.status(404).json({ message: 'Order not found' });
 
     const wasConfirmed = order.orderStatus === 'CONFIRMED';
+    const previousStatus = order.orderStatus;
     if (orderStatus) order.orderStatus = orderStatus;
     if (paymentStatus) order.paymentStatus = paymentStatus;
 
     await order.save();
+
+    // Dashboard notifications for key status transitions
+    if (order.orderStatus === 'CANCELLED' && previousStatus !== 'CANCELLED') {
+      notify.createNotification({
+        type: 'order_cancelled',
+        title: 'Order cancelled',
+        message: `Order #${String(order.id).slice(-8).toUpperCase()} was cancelled.`,
+        orderId: order.id,
+        link: '/admin/orders'
+      });
+    } else if (order.orderStatus === 'DELIVERED' && previousStatus !== 'DELIVERED') {
+      notify.createNotification({
+        type: 'order_delivered',
+        title: 'Order delivered',
+        message: `Order #${String(order.id).slice(-8).toUpperCase()} was delivered successfully.`,
+        orderId: order.id,
+        link: '/admin/orders'
+      });
+    }
 
     let whatsappUrl = null;
     let whatsappSent = false;

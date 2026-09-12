@@ -6,7 +6,8 @@ const categorySchema = new mongoose.Schema({
   slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
   description: String,
   icon: String,
-  image: String
+  image: String,
+  isActive: { type: Boolean, default: true }
 });
 
 categorySchema.plugin(toJSONPlugin);

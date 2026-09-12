@@ -114,6 +114,7 @@
         <div class="dropdown-panel account-panel" *ngIf="showAccountMenu">
           <span class="hello">Hi, {{ firstName }}</span>
           <a routerLink="/orders" (click)="showAccountMenu = false">My Orders</a>
+          <a *ngIf="isAdmin" routerLink="/admin/dashboard" (click)="showAccountMenu = false" class="admin-link">⚙ Admin Dashboard</a>
           <button class="logout-btn" (click)="logout()">Logout</button>
         </div>
       </div>

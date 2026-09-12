@@ -1,0 +1,68 @@
+<div class="admin-layout">
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="sidebarOpen = false"></div>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-brand">
+      <img src="assets/images/logo.png" alt="Lakshmi Millets" class="sidebar-logo">
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">Lakshmi Millets</span>
+        <span class="sidebar-brand-sub">Admin Panel</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a *ngFor="let item of navItems"
+         [class.active]="isActive(item.key)"
+         (click)="navigateTo(item.key)"
+         class="sidebar-link">
+        <span class="sidebar-icon">{{ item.icon }}</span>
+        <span class="sidebar-label">{{ item.label }}</span>
+        <span *ngIf="item.badge === 'unreadMessages' && unreadMessages > 0" class="sidebar-badge">{{ unreadMessages }}</span>
+        <span *ngIf="item.badge === 'unreadNotifications' && unreadNotifications > 0" class="sidebar-badge">{{ unreadNotifications }}</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <span class="sidebar-user-name">{{ currentUser?.name || 'Admin' }}</span>
+        <span class="sidebar-user-email">{{ currentUser?.email || '' }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main content area -->
+  <div class="admin-main">
+    <!-- Top header -->
+    <header class="admin-header">
+      <div class="header-left">
+        <button class="hamburger" (click)="toggleSidebar()" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+        <a routerLink="/" class="header-brand">
+          <img src="assets/images/logo.png" alt="Logo" class="header-logo">
+          <span class="header-brand-name">Lakshmi Millets & Foods</span>
+        </a>
+      </div>
+      <div class="header-right">
+        <button class="header-icon" routerLink="/admin/notifications" [routerLinkActive]="'active'">
+          🔔
+          <span *ngIf="unreadNotifications > 0" class="header-badge">{{ unreadNotifications }}</span>
+        </button>
+        <div class="header-profile">
+          <span class="profile-name">{{ currentUser?.name || 'Admin' }}</span>
+          <span class="profile-role">{{ currentUser?.role || 'admin' }}</span>
+        </div>
+        <button class="header-icon logout-btn" (click)="logout()" title="Logout">
+          🚪
+        </button>
+      </div>
+    </header>
+
+    <!-- Page content -->
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

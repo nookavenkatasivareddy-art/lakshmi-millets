@@ -1,0 +1,238 @@
+.loading-state {
+  text-align: center;
+  padding: 60px;
+  color: #888;
+  font-size: 16px;
+}
+
+.error-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.error-text { color: var(--danger); font-size: 14px; margin-bottom: 12px; }
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  transition: 0.2s;
+}
+
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+
+.stat-icon { font-size: 32px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background: var(--green-light); border-radius: 12px; }
+
+.stat-info { display: flex; flex-direction: column; }
+.stat-label { font-size: 12px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value { font-size: 22px; font-weight: 700; color: var(--green-dark); }
+
+.stat-sales .stat-icon { background: #fff3e0; }
+.stat-orders .stat-icon { background: #e8f5e9; }
+.stat-products .stat-icon { background: #e3f2fd; }
+.stat-users .stat-icon { background: #fce4ec; }
+.stat-pending .stat-icon { background: #fff3e0; }
+.stat-delivered .stat-icon { background: #e8f5e9; }
+.stat-cancelled .stat-icon { background: #ffebee; }
+.stat-low .stat-icon { background: #fff9c4; }
+
+/* Chart Section */
+.chart-section {
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chart-header h3 { color: var(--green-dark); margin: 0; font-size: 20px; }
+
+.chart-filters { display: flex; gap: 6px; }
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: 0.15s;
+  font-family: inherit;
+  color: #555;
+}
+
+.filter-btn.active { background: var(--green); color: #fff; border-color: var(--green); }
+.filter-btn:hover { border-color: var(--green); color: var(--green); }
+.filter-btn.active:hover { color: #fff; }
+
+.sales-summary-bar {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Chart Bars */
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 180px;
+  padding: 0 8px;
+  border-bottom: 2px solid #eee;
+}
+
+.bar-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+.bar-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.bar {
+  width: 70%;
+  max-width: 40px;
+  background: var(--green);
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s;
+  min-height: 2px;
+}
+
+.bar:hover { background: var(--green-dark); }
+
+.bar-label {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.chart-empty {
+  text-align: center;
+  padding: 40px;
+  color: #aaa;
+}
+
+/* Dashboard Columns */
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 20px;
+}
+
+.dashboard-col { padding: 20px; overflow: hidden; }
+.dashboard-col-right { display: flex; flex-direction: column; gap: 20px; }
+
+.col-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.col-header h3 { color: var(--green-dark); margin: 0; font-size: 18px; }
+
+.view-all-link {
+  font-size: 13px;
+  color: var(--green);
+  font-weight: 600;
+  text-decoration: none;
+}
+.view-all-link:hover { text-decoration: underline; }
+
+.table-wrapper { overflow-x: auto; }
+
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th, .admin-table td { padding: 10px 8px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+.admin-table thead th { background: var(--green-light); color: var(--green-dark); font-size: 12px; font-weight: 600; text-transform: uppercase; }
+.admin-table tbody tr { cursor: pointer; transition: 0.1s; }
+.admin-table tbody tr:hover { background: #fafafa; }
+
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.empty-state { text-align: center; padding: 30px; color: #aaa; font-size: 14px; }
+
+/* Top Products */
+.top-product-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.top-product-item:last-child { border-bottom: none; }
+.top-product-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+.top-product-info { flex: 1; display: flex; flex-direction: column; }
+.top-product-name { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+.top-product-stats { font-size: 12px; color: #888; }
+
+/* Low Stock */
+.low-stock-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.low-stock-item:last-child { border-bottom: none; }
+.low-product-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+.low-stock-info { flex: 1; display: flex; flex-direction: column; }
+.low-product-name { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+.low-stock-badge { font-size: 12px; font-weight: 600; color: #e65100; }
+.low-stock-badge.critical { color: #c0392b; }
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .stat-card { padding: 14px; }
+  .stat-icon { font-size: 24px; width: 40px; height: 40px; }
+  .stat-value { font-size: 18px; }
+  .chart-bars { height: 120px; }
+  .bar-label { font-size: 9px; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .chart-header { flex-direction: column; align-items: flex-start; }
+}

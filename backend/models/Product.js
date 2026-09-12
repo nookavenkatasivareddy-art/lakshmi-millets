@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema({
   isPopular: { type: Boolean, default: false },
   image: String,
   description: String,
-  stock: { type: Number, default: 0 }
+  stock: { type: Number, default: 0 },
+  isActive: { type: Boolean, default: true }
 });
 
 // Helpful for /api/products?search= and category filtering

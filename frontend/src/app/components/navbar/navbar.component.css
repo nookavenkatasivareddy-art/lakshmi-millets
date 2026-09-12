@@ -193,6 +193,17 @@
   color: var(--danger);
 }
 .logout-btn:hover { background: var(--green-light); }
+.admin-link {
+  display: block;
+  padding: 9px 18px;
+  font-size: 14px;
+  color: var(--green);
+  font-weight: 600;
+  cursor: pointer;
+  border-top: 1px solid #eee;
+  text-decoration: none;
+}
+.admin-link:hover { background: var(--green-light); }
 
 .cart-link { text-decoration: none; }
 .cart-badge {
