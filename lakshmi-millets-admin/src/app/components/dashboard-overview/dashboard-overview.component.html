@@ -1,0 +1,162 @@
+<div *ngIf="loading" class="loading-state">
+  <p>Loading dashboard...</p>
+</div>
+
+<div *ngIf="!loading && errorMsg" class="error-state">
+  <p class="error-text">{{ errorMsg }}</p>
+  <button class="btn btn-primary" (click)="load()">Retry</button>
+</div>
+
+<div *ngIf="!loading && !errorMsg">
+  <!-- Summary Cards -->
+  <div class="stats-grid">
+    <div class="stat-card stat-sales">
+      <div class="stat-icon">💰</div>
+      <div class="stat-info">
+        <span class="stat-label">Total Sales</span>
+        <span class="stat-value">{{ formatPrice(stats.totalSales) }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-orders">
+      <div class="stat-icon">🛒</div>
+      <div class="stat-info">
+        <span class="stat-label">Total Orders</span>
+        <span class="stat-value">{{ stats.totalOrders || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-products">
+      <div class="stat-icon">📦</div>
+      <div class="stat-info">
+        <span class="stat-label">Total Products</span>
+        <span class="stat-value">{{ stats.totalProducts || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-users">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <span class="stat-label">Total Users</span>
+        <span class="stat-value">{{ stats.totalUsers || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-pending">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-info">
+        <span class="stat-label">Pending Orders</span>
+        <span class="stat-value">{{ stats.pendingOrders || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-delivered">
+      <div class="stat-icon">✅</div>
+      <div class="stat-info">
+        <span class="stat-label">Delivered Orders</span>
+        <span class="stat-value">{{ stats.deliveredOrders || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-cancelled">
+      <div class="stat-icon">❌</div>
+      <div class="stat-info">
+        <span class="stat-label">Cancelled Orders</span>
+        <span class="stat-value">{{ stats.cancelledOrders || 0 }}</span>
+      </div>
+    </div>
+    <div class="stat-card stat-low">
+      <div class="stat-icon">⚠️</div>
+      <div class="stat-info">
+        <span class="stat-label">Low Stock Products</span>
+        <span class="stat-value">{{ lowStockProducts.length }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sales Overview Chart -->
+  <div class="chart-section card">
+    <div class="chart-header">
+      <h3>Sales Overview</h3>
+      <div class="chart-filters">
+        <button *ngFor="let opt of salesFilterOptions"
+                [class.active]="salesRange === opt.key"
+                (click)="onSalesRangeChange(opt.key)"
+                class="filter-btn">
+          {{ opt.label }}
+        </button>
+      </div>
+    </div>
+    <div class="sales-summary-bar">
+      <span>Total: <b>{{ formatPrice(salesData.total || 0) }}</b></span>
+      <span>Orders: <b>{{ salesData.count || 0 }}</b></span>
+    </div>
+    <div class="chart-bars" *ngIf="getBarData().length">
+      <div *ngFor="let bar of getBarData()" class="bar-group">
+        <div class="bar-wrapper">
+          <div class="bar" [style.height.%]="(bar.value / getMaxBarValue() * 100) || 0" [title]="formatPrice(bar.value)"></div>
+        </div>
+        <span class="bar-label">{{ bar.label }}</span>
+      </div>
+    </div>
+    <div *ngIf="!getBarData().length" class="chart-empty">No sales data for this period.</div>
+  </div>
+
+  <div class="dashboard-columns">
+    <!-- Recent Orders -->
+    <div class="dashboard-col card">
+      <div class="col-header">
+        <h3>Recent Orders</h3>
+        <a routerLink="/admin/orders" class="view-all-link">View All →</a>
+      </div>
+      <div class="table-wrapper" *ngIf="recentOrders.length">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of recentOrders" (click)="openOrder(order)">
+              <td>#{{ orderLabel(order) }}</td>
+              <td>{{ order?.userId?.name || order?.shippingAddress?.fullName || '-' }}</td>
+              <td>{{ formatPrice(order?.grandTotal) }}</td>
+              <td><span class="status-badge" [style.background]="statusColors[order?.orderStatus] || '#888'">{{ order?.orderStatus }}</span></td>
+              <td><button class="btn btn-outline tiny">View</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="!recentOrders.length" class="empty-state">No orders yet.</div>
+    </div>
+
+    <!-- Top Selling Products & Low Stock -->
+    <div class="dashboard-col-right">
+      <div class="card">
+        <div class="col-header"><h3>Top Selling Products</h3></div>
+        <div *ngIf="topProducts.length" class="top-products-list">
+          <div *ngFor="let p of topProducts" class="top-product-item">
+            <img [src]="p.image ? '/uploads/products/' + p.image.split('/').pop() : 'assets/images/millet-bowl.png'" [alt]="p.name" class="top-product-img">
+            <div class="top-product-info">
+              <span class="top-product-name">{{ p.name }}</span>
+              <span class="top-product-stats">{{ p.units }} units · {{ formatPrice(p.revenue) }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!topProducts.length" class="empty-state">No sales data yet.</div>
+      </div>
+
+      <div class="card">
+        <div class="col-header"><h3>Low Stock Products</h3></div>
+        <div *ngIf="lowStockProducts.length" class="low-stock-list">
+          <div *ngFor="let p of lowStockProducts" class="low-stock-item">
+            <img [src]="p.image ? '/uploads/products/' + p.image.split('/').pop() : 'assets/images/millet-bowl.png'" [alt]="p.name" class="low-product-img">
+            <div class="low-stock-info">
+              <span class="low-product-name">{{ p.name }}</span>
+              <span class="low-stock-badge" [class.critical]="p.stock <= 5">Stock: {{ p.stock }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!lowStockProducts.length" class="empty-state">All products are well-stocked.</div>
+      </div>
+    </div>
+  </div>
+</div>

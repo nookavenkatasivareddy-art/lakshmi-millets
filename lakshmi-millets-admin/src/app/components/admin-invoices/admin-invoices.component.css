@@ -1,0 +1,6 @@
+.admin-page { padding: 0; }
+.admin-page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.admin-page-header h2 { color: var(--green-dark); margin: 0; }
+.toolbar { padding: 12px; margin-bottom: 20px; }
+.search-input { max-width: 360px; }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 20px; }

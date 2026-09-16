@@ -1,0 +1,32 @@
+<div class="admin-page">
+  <div class="admin-page-header">
+    <h2>Notifications</h2>
+    <button class="btn btn-outline" (click)="markAllRead()">✓ Mark All Read</button>
+  </div>
+
+  <p *ngIf="loading">Loading notifications...</p>
+  <p *ngIf="!loading && errorMsg" class="error-text">{{ errorMsg }}</p>
+
+  <div *ngIf="!loading && notifications.length">
+    <div *ngFor="let n of notifications" class="notification-item card" [class.unread]="!n.isRead">
+      <div class="notif-icon">{{ typeIcons[n.type] || '🔔' }}</div>
+      <div class="notif-content">
+        <div class="notif-title">{{ n.title || n.typeLabel || 'Notification' }} <span class="notif-type">({{ typeLabels[n.type] || n.type }})</span></div>
+        <div class="notif-msg">{{ n.message || '' }}</div>
+        <small class="notif-date">{{ n.createdAt | date:'medium' }}</small>
+      </div>
+      <div class="notif-actions">
+        <button class="btn btn-outline tiny" (click)="markRead(n.id)" [disabled]="n.isRead">{{ n.isRead ? 'Read' : 'Mark Read' }}</button>
+        <button class="btn btn-outline tiny danger" (click)="deleteNotification(n.id)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="totalPages > 1 && notifications.length" class="pagination">
+    <button class="btn btn-outline tiny" [disabled]="page <= 1" (click)="goToPage(page - 1)">← Prev</button>
+    <span>Page {{ page }} of {{ totalPages }}</span>
+    <button class="btn btn-outline tiny" [disabled]="page >= totalPages" (click)="goToPage(page + 1)">Next →</button>
+  </div>
+
+  <div *ngIf="!loading && !notifications.length && !errorMsg" class="empty-state card">No notifications.</div>
+</div>

@@ -1,0 +1,26 @@
+.admin-page { padding: 0; }
+.admin-page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.admin-page-header h2 { color: var(--green-dark); margin: 0; }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 20px; }
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  margin-bottom: 10px;
+  border-left: 4px solid transparent;
+  transition: 0.15s;
+}
+.notification-item.unread { border-left-color: var(--green); background: #f1f8e9; }
+.notification-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+.notif-icon { font-size: 24px; width: 40px; text-align: center; flex-shrink: 0; }
+.notif-content { flex: 1; }
+.notif-title { font-weight: 700; font-size: 14px; color: var(--text-dark); }
+.notif-type { font-weight: 400; color: #888; font-size: 12px; }
+.notif-msg { font-size: 13px; color: #555; margin-top: 4px; line-height: 1.4; }
+.notif-date { color: #aaa; font-size: 11px; }
+.notif-actions { display: flex; gap: 6px; flex-shrink: 0; align-self: center; }
+
+.empty-state { text-align: center; padding: 40px; color: #aaa; }

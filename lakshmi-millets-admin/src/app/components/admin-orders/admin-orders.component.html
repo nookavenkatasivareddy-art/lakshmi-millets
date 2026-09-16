@@ -1,0 +1,122 @@
+<section class="container orders-page">
+  <div class="orders-header">
+    <h2 class="section-title">Admin <span class="highlight">Orders</span></h2>
+    <a routerLink="/admin/settings" class="btn btn-outline small">⚙ Settings</a>
+  </div>
+
+  <p *ngIf="loading">Loading orders...</p>
+  <p *ngIf="!loading && errorMsg" class="error-text">{{ errorMsg }}</p>
+  <p *ngIf="!loading && !errorMsg && orders.length === 0">No orders yet.</p>
+
+  <div class="order-card card" *ngFor="let order of orders">
+    <div class="order-header">
+      <div>
+        <b>Order #{{ orderLabel(order) }}</b>
+        <small>{{ order.createdAt | date: 'medium' }} · {{ customerName(order) }} · {{ order.shippingAddress?.phone }}</small>
+      </div>
+      <span class="status-badge">{{ order.orderStatus }}</span>
+    </div>
+
+    <div class="order-items">
+      <div class="order-item" *ngFor="let item of order.items">
+        <span>{{ item.name }} × {{ item.quantity }}</span>
+        <span>₹{{ item.price * item.quantity }}</span>
+      </div>
+    </div>
+
+    <div class="order-footer">
+      <span>Ship to: {{ order.shippingAddress?.fullName }}, {{ order.shippingAddress?.city }}, {{ order.shippingAddress?.state }} - {{ order.shippingAddress?.pincode }}</span>
+      <span class="total">Total: ₹{{ order.grandTotal }} ({{ order.paymentMethod }} / {{ order.paymentStatus }})</span>
+    </div>
+
+      <div class="admin-actions">
+      <button class="btn btn-primary small" (click)="openDetails(order)">🛒 Order Details</button>
+      <button class="btn btn-outline small" (click)="openCustomerWhatsApp(order)">WhatsApp customer</button>
+      <span *ngIf="isUpiAwaitingAdmin(order)" class="status-badge pending-verify">⚠ Verify Payment</span>
+      <span *ngIf="isUpiPendingVerification(order)" class="status-badge awaiting-proof">⏳ Waiting for Proof</span>
+    </div>
+  </div>
+</section>
+
+<!-- Order Details modal (image-1 flow) -->
+<div class="modal-backdrop" *ngIf="selected" (click)="closeDetails()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>🛒 Order Details <span>#{{ orderLabel(selected) }}</span></h3>
+      <button class="modal-close" (click)="closeDetails()" aria-label="Close">×</button>
+    </div>
+
+    <div class="modal-body">
+      <h4 class="m-title">👤 Customer Information</h4>
+      <div class="info-grid">
+        <div><small>Name:</small> {{ customerName(selected) }}</div>
+        <div><small>Email:</small> {{ selected.userId?.email || '-' }}</div>
+        <div><small>Phone:</small> {{ selected.userId?.phone || selected.shippingAddress?.phone || '-' }}</div>
+        <div><small>Date:</small> {{ selected.createdAt | date: 'M/d/yyyy, h:mm:ss a' }}</div>
+      </div>
+
+      <h4 class="m-title">📍 Shipping Address</h4>
+      <div class="address-box">
+        {{ selected.shippingAddress?.line1 }}{{ selected.shippingAddress?.line2 ? ', ' + selected.shippingAddress.line2 : '' }}, {{ selected.shippingAddress?.city }}, {{ selected.shippingAddress?.state }} - {{ selected.shippingAddress?.pincode }}
+      </div>
+
+      <h4 class="m-title">📦 Order Items</h4>
+      <table class="items-table">
+        <thead>
+          <tr><th>Product</th><th>Grams</th><th>Quantity</th><th>Price</th><th>Subtotal</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of selected.items">
+            <td>{{ item.name }}</td>
+            <td>{{ item.weight || '-' }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.price }}</td>
+            <td>₹{{ item.price * item.quantity }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="4">Subtotal:</td><td>₹{{ itemsSubtotal(selected) }}</td></tr>
+          <tr><td colspan="4">GST:</td><td>₹{{ selected.gstAmount || 0 }}</td></tr>
+          <tr><td colspan="4">Shipping:</td><td>₹{{ selected.deliveryCharge || 0 }}</td></tr>
+          <tr class="grand"><td colspan="4">Grand Total:</td><td>₹{{ selected.grandTotal }}</td></tr>
+        </tfoot>
+      </table>
+
+      <h4 class="m-title">💳 Payment Information</h4>
+      <div class="info-grid">
+        <div><small>Payment Method:</small> {{ selected.paymentMethod }}</div>
+        <div>Payment Status: <span class="pay-badge" [class.paid]="selected.paymentStatus === 'PAID'">{{ selected.paymentStatus }}</span></div>
+        <div class="txn"><small>Transaction ID:</small> {{ selected.paymentId || '-' }}</div>
+        <div *ngIf="selected.paymentDetails?.utr"><small>UTR:</small> {{ selected.paymentDetails?.utr || '-' }}</div>
+        <div *ngIf="selected.paymentDetails?.screenshot"><small>Screenshot:</small> <a [href]="selected.paymentDetails?.screenshot" target="_blank">View</a></div>
+
+        <!-- UPI payment verification buttons -->
+        <div *ngIf="selected.paymentMethod === 'UPI' && selected.paymentStatus === 'VERIFICATION_PENDING'" class="payment-verify-actions">
+          <small>Verify payment proof (UTR + screenshot): </small>
+          <button class="btn btn-success small" (click)="verifyPayment(true)" [disabled]="updatingModal">✅ Verify & Confirm</button>
+          <button class="btn btn-outline small" (click)="verifyPayment(false)" [disabled]="updatingModal">❌ Reject</button>
+        </div>
+
+        <!-- UPI payment link for sharing -->
+        <div *ngIf="selected.paymentDetails?.upiLink" class="upi-link-box">
+          <small>UPI Payment Link:</small>
+          <a [href]="selected.paymentDetails.upiLink" target="_blank">Open UPI Link</a>
+        </div>
+      </div>
+
+      <h4 class="m-title">🔄 Order Status</h4>
+      <select class="status-select" [(ngModel)]="selectedStatus">
+        <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+      </select>
+      <p class="modal-msg" *ngIf="modalMsg" [class.ok]="modalOk">{{ modalMsg }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-outline small" (click)="printInvoice()">📄 View Invoice</button>
+      <button class="btn btn-outline small" (click)="closeDetails()">Close</button>
+      <button class="btn btn-primary small" (click)="updateStatus()" [disabled]="updatingModal">
+        {{ updatingModal ? 'Updating…' : 'Update Status' }}
+      </button>
+    </div>
+  </div>
+</div>
