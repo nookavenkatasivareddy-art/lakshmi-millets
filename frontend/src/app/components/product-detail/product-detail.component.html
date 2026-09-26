@@ -1,37 +1,357 @@
 <section class="container detail-page" *ngIf="product as p">
   <div class="detail-grid">
+
+    <!-- Product Image -->
     <div class="detail-img card">
-      <img [src]="p.image | imageUrl:'products'" [alt]="p.name" onerror="this.src='assets/images/placeholder.jpg'">
-    </div>
+
+  <button
+    type="button"
+    class="detail-wishlist-btn"
+    [class.active]="isInWishlist()"
+    (click)="toggleWishlist($event)"
+    [attr.aria-label]="isInWishlist() ? 'Remove from wishlist' : 'Add to wishlist'"
+  >
+    {{ isInWishlist() ? '♥' : '♡' }}
+  </button>
+
+  <img
+    [src]="p.image | imageUrl:'products'"
+    [alt]="p.name"
+    onerror="this.src='assets/images/placeholder.jpg'"
+  >
+
+</div>
+
+    <!-- Product Information -->
     <div class="detail-info">
       <h2>{{ p.name }}</h2>
+
       <p class="weight">{{ p.weight }}</p>
+
       <div class="product-price">
         <span class="price big">₹{{ p.price }}</span>
         <span class="mrp">₹{{ p.mrp }}</span>
-        <span class="badge in-stock" *ngIf="p.stock > 5">In Stock</span>
-        <span class="badge low-stock" *ngIf="p.stock > 0 && p.stock <= 5">Only {{ p.stock }} left</span>
-        <span class="badge out-of-stock" *ngIf="p.stock <= 0">Out of Stock</span>
+
+        <span class="badge in-stock" *ngIf="p.stock > 5">
+          In Stock
+        </span>
+
+        <span class="badge low-stock" *ngIf="p.stock > 0 && p.stock <= 5">
+          Only {{ p.stock }} left
+        </span>
+
+        <span class="badge out-of-stock" *ngIf="p.stock <= 0">
+          Out of Stock
+        </span>
       </div>
+
       <p class="description">{{ p.description }}</p>
 
+      <!-- Quantity -->
       <div class="qty-row" *ngIf="p.stock > 0">
         <label>Quantity</label>
+
         <div class="qty-selector">
-          <button (click)="changeQty(-1)" [disabled]="quantity <= 1">−</button>
+          <button
+            (click)="changeQty(-1)"
+            [disabled]="quantity <= 1"
+          >
+            −
+          </button>
+
           <span>{{ quantity }}</span>
-          <button (click)="changeQty(1)" [disabled]="quantity >= p.stock">+</button>
+
+          <button
+            (click)="changeQty(1)"
+            [disabled]="quantity >= p.stock"
+          >
+            +
+          </button>
         </div>
       </div>
 
+      <!-- Buttons -->
       <div class="action-row">
-        <button class="btn btn-outline" [disabled]="p.stock <= 0" (click)="addToCart()">🛒 Add to Cart</button>
-        <button class="btn btn-primary" [disabled]="p.stock <= 0" (click)="buyNow()">
+        <button
+          class="btn btn-outline"
+          [disabled]="p.stock <= 0"
+          (click)="addToCart()"
+        >
+          🛒 Add to Cart
+        </button>
+
+        <button
+          class="btn btn-primary"
+          [disabled]="p.stock <= 0"
+          (click)="buyNow()"
+        >
           {{ p.stock <= 0 ? 'Out of Stock' : 'Buy Now →' }}
+        </button>
+      </div>
+
+      <!-- Trust Information -->
+      <div class="trust-box">
+
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <div>
+            <strong>Genuine Quality</strong>
+            <small>Quality products you can trust</small>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-icon">✓</span>
+          <div>
+            <strong>Satisfaction Guaranteed</strong>
+            <small>Your satisfaction is our priority</small>
+          </div>
+        </div>
+
+        <div class="trust-item">
+          <span class="trust-icon">🔒</span>
+          <div>
+            <strong>Secure Checkout</strong>
+            <small>Safe and secure payment</small>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Delivery -->
+      <div class="delivery-box">
+        <h3>🚚 Delivery Options</h3>
+
+        <p>Enter your pincode to check delivery availability.</p>
+
+        <div class="pincode-row">
+          <input
+            type="text"
+            maxlength="6"
+            placeholder="Enter Pincode"
+          />
+
+          <button type="button">
+            Check
+          </button>
+        </div>
+
+        <div class="delivery-info">
+          🚚 Get delivery at your doorstep
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Product Details -->
+  <section class="product-details-section">
+    <h2>Product Details</h2>
+
+    <div class="product-details-content">
+      <p>{{ p.description }}</p>
+
+      <p *ngIf="p.weight">
+        <strong>Weight:</strong> {{ p.weight }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Reviews -->
+  <section class="reviews-section">
+
+    <div class="reviews-header">
+      <div>
+        <h2>Reviews & Ratings</h2>
+
+        <div class="rating-summary" *ngIf="reviewTotal > 0">
+          <span class="rating-number">
+            {{ reviewAverage | number:'1.1-1' }}
+          </span>
+
+          <span class="rating-stars">
+            {{ getStars(reviewAverage) }}
+          </span>
+
+          <span class="rating-count">
+            ({{ reviewTotal }} reviews)
+          </span>
+        </div>
+
+        <div class="no-rating" *ngIf="reviewTotal === 0">
+          No Customer Reviews
+        </div>
+      </div>
+
+      <button
+        class="write-review-btn"
+        type="button"
+        (click)="openReviewForm()"
+      >
+        ✍️ Write a Review
+      </button>
+    </div>
+
+    <!-- Review Form -->
+    <div class="review-form" *ngIf="showReviewForm">
+
+      <h3>Write a Review</h3>
+
+      <label>Your Name</label>
+
+      <input
+        type="text"
+        [(ngModel)]="reviewName"
+        placeholder="Enter your name"
+      />
+
+      <label>Rating</label>
+
+      <div class="rating-selector">
+        <button
+          type="button"
+          *ngFor="let star of [1,2,3,4,5]"
+          [class.selected]="star <= reviewRating"
+          (click)="setRating(star)"
+        >
+          ★
+        </button>
+      </div>
+
+      <label>Your Review</label>
+
+      <textarea
+        rows="5"
+        [(ngModel)]="reviewComment"
+        placeholder="Write your review..."
+      ></textarea>
+
+      <div
+        class="review-message"
+        *ngIf="reviewMessage"
+      >
+        {{ reviewMessage }}
+      </div>
+
+      <div class="review-form-actions">
+
+        <button
+          type="button"
+          class="btn btn-outline"
+          (click)="closeReviewForm()"
+          [disabled]="reviewSubmitting"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="submitReview()"
+          [disabled]="reviewSubmitting"
+        >
+          {{ reviewSubmitting ? 'Submitting...' : 'Submit Review' }}
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-list" *ngIf="reviews.length > 0">
+
+      <div
+        class="review-card"
+        *ngFor="let review of reviews"
+      >
+
+        <div class="review-top">
+
+          <strong>
+            {{ review.userName || 'Customer' }}
+          </strong>
+
+          <span class="review-stars">
+            {{ getStars(review.rating) }}
+          </span>
+
+        </div>
+
+        <p>{{ review.comment }}</p>
+
+        <small *ngIf="review.createdAt">
+          {{ review.createdAt | date:'mediumDate' }}
+        </small>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+<section class="related-products-section" *ngIf="relatedProducts.length > 0">
+  <div class="container">
+    <h2>Related <span>Products</span></h2>
+
+    <div class="related-products-grid">
+      <div
+        class="related-product-card"
+        *ngFor="let related of relatedProducts"
+      >
+        <a [routerLink]="['/product', related.slug]" class="related-product-image">
+
+          <button
+            type="button"
+            class="related-wishlist-btn"
+            [class.active]="isRelatedInWishlist(related)"
+            (click)="toggleRelatedWishlist(related, $event)"
+          >
+            {{ isRelatedInWishlist(related) ? '♥' : '♡' }}
+          </button>
+
+          <span
+            class="related-stock-badge"
+            *ngIf="related.stock <= 0"
+          >
+            Out of Stock
+          </span>
+
+          <img
+            [src]="related.image | imageUrl:'products'"
+            [alt]="related.name"
+            onerror="this.src='assets/images/placeholder.jpg'"
+          >
+        </a>
+
+        <a [routerLink]="['/product', related.slug]">
+          <h3>{{ related.name }}</h3>
+        </a>
+
+        <p class="related-weight">{{ related.weight }}</p>
+
+        <div class="related-price">
+          <strong>₹{{ related.price }}</strong>
+          <del *ngIf="related.mrp > related.price">
+            ₹{{ related.mrp }}
+          </del>
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary related-cart-btn"
+          [disabled]="related.stock <= 0"
+          (click)="addRelatedToCart(related)"
+        >
+          {{ related.stock <= 0 ? 'Out of Stock' : '🛒 Add to Cart' }}
         </button>
       </div>
     </div>
   </div>
 </section>
-
-<p class="container" *ngIf="!loading && !product">Product not found.</p>
+<p
+  class="container"
+  *ngIf="!loading && !product"
+>
+  Product not found.
+</p>

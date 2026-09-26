@@ -46,7 +46,7 @@ export class AdminProductsComponent implements OnInit {
 
   loadCategories(): void {
     this.adminService.getAdminCategories().subscribe({
-      next: res => { this.categories = res?.categories || []; },
+      next: res => { this.categories = Array.isArray(res) ? res : (res?.categories || []); },
       error: () => { this.categories = []; }
     });
   }
@@ -78,6 +78,10 @@ export class AdminProductsComponent implements OnInit {
 
   saveProduct(): void {
     if (!this.productForm.name || this.productForm.price == null || this.productForm.mrp == null) return;
+    if (!this.productForm.categoryId) {
+  alert('Please select a category');
+  return;
+}
     if (this.isEditing) {
       this.adminService.updateProduct(this.editId, this.productForm).subscribe({
         next: () => { this.showAddForm = false; this.loadProducts(); },

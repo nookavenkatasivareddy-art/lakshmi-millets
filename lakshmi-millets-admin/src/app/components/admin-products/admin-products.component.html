@@ -20,13 +20,37 @@
           <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
         </select>
       </div>
+
+      <div class="form-group"><label>Brand</label>
+        <select [(ngModel)]="productForm.brandId">
+          <option value="">Select brand</option>
+          <option *ngFor="let b of brands" [value]="b.id">{{ b.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Product Type</label>
+        <select [(ngModel)]="productForm.productTypeId">
+          <option value="">Select product type</option>
+          <option *ngFor="let pt of productTypes" [value]="pt.id">{{ pt.name }}</option>
+        </select>
+      </div>
+
       <div class="form-group"><label>Weight</label><input [(ngModel)]="productForm.weight" placeholder="e.g. 1kg"></div>
       <div class="form-group"><label>Stock</label><input type="number" [(ngModel)]="productForm.stock" placeholder="0"></div>
       <div class="form-group"><label>Description</label><textarea [(ngModel)]="productForm.description" rows="3" placeholder="Description"></textarea></div>
       <div class="form-group"><label>Image URL</label><input [(ngModel)]="productForm.image" placeholder="/uploads/products/image.jpg"></div>
       <div class="form-group">
         <label>&nbsp;</label>
-        <label class="checkbox-label"><input type="checkbox" [(ngModel)]="productForm.isPopular"> Popular</label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="productForm.isPopular"> Popular
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="productForm.isFeatured"> Featured
+        </label>
       </div>
     </div>
     <div class="form-actions">

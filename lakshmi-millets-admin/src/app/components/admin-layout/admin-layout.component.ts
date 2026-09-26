@@ -76,19 +76,15 @@ export class AdminLayoutComponent implements OnInit, OnDestroy {
   }
 
   navigateTo(key: string): void {
-    if (key === 'dashboard') {
-      this.router.navigate(['/admin/dashboard']);
-    } else {
-      this.router.navigate([`/admin/${key}`]);
-    }
-  }
+  this.router.navigate([key]);
+}
 
   toggleSidebar(): void {
     this.sidebarOpen = !this.sidebarOpen;
   }
 
   logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/']);
-  }
+  this.auth.logout();
+  window.location.href = '/admin/login';
+}
 }

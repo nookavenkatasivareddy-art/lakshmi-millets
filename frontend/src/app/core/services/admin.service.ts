@@ -65,7 +65,7 @@ export class AdminService {
 
   // Categories
   getAdminCategories(): Observable<any> {
-    return this.http.get<any>(`${API_BASE_URL}/admin/categories`);
+    return this.http.get<any>(`${API_BASE_URL}/categories`);
   }
 
   createCategory(data: any): Observable<any> {
