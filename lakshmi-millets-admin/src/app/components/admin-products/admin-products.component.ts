@@ -24,10 +24,14 @@ export class AdminProductsComponent implements OnInit {
   isEditing = false;
   editId = '';
   categories: any[] = [];
+  brands: any[] = [];
+  productTypes: any[] = [];
 
   productForm = {
-    name: '', slug: '', categoryId: '', price: null as any, mrp: null as any,
-    weight: '', stock: 0, description: '', image: '', isPopular: false
+    name: '', slug: '', categoryId: '', brandId: '', productTypeId: '',
+    price: null as any, mrp: null as any,
+    weight: '', stock: 0, description: '', image: '',
+    isPopular: false, isFeatured: false
   };
 
   constructor(
@@ -37,6 +41,8 @@ export class AdminProductsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
+    this.loadBrands();
+    this.loadProductTypes();
     this.loadProducts();
   }
 
@@ -52,6 +58,28 @@ export class AdminProductsComponent implements OnInit {
     this.adminService.getAdminCategories().subscribe({
       next: res => { this.categories = res?.categories || []; },
       error: () => { this.categories = []; }
+    });
+  }
+
+  loadBrands(): void {
+    this.adminService.getBrands().subscribe({
+      next: res => {
+        this.brands = res?.brands || res || [];
+      },
+      error: () => {
+        this.brands = [];
+      }
+    });
+  }
+
+  loadProductTypes(): void {
+    this.adminService.getProductTypes().subscribe({
+      next: res => {
+        this.productTypes = res?.productTypes || res || [];
+      },
+      error: () => {
+        this.productTypes = [];
+      }
     });
   }
 
@@ -75,7 +103,11 @@ export class AdminProductsComponent implements OnInit {
   openAddForm(): void {
     this.showAddForm = true;
     this.isEditing = false;
-    this.productForm = { name: '', slug: '', categoryId: '', price: null, mrp: null, weight: '', stock: 0, description: '', image: '', isPopular: false };
+    this.productForm = {
+      name: '', slug: '', categoryId: '', brandId: '', productTypeId: '',
+      price: null, mrp: null, weight: '', stock: 0, description: '', image: '',
+      isPopular: false, isFeatured: false
+    };
   }
 
   closeAddForm(): void { this.showAddForm = false; }
@@ -98,7 +130,13 @@ export class AdminProductsComponent implements OnInit {
   editProduct(p: any): void {
     this.isEditing = true;
     this.editId = p.id;
-    this.productForm = { ...p, categoryId: p.category?.id || p.categoryId || '' };
+    this.productForm = {
+      ...p,
+      categoryId: p.category?.id || p.categoryId || '',
+      brandId: p.brandId || '',
+      productTypeId: p.productTypeId || '',
+      isFeatured: !!p.isFeatured
+    };
     this.showAddForm = true;
   }
 

@@ -100,7 +100,7 @@ export class DashboardOverviewComponent implements OnInit {
 
   formatPrice(n: number): string { return '₹' + (Number(n) || 0).toLocaleString('en-IN'); }
 
-  openOrder(order: any): void { const id = order?.id || order?._id; if (id) this.router.navigate(['/admin/orders'], { queryParams: { open: id } }); }
+  openOrder(order: any): void { const id = order?.id || order?._id; if (id) this.router.navigate(['/orders'], { queryParams: { open: id } }); }
 
   getBarData(): { label: string; value: number }[] {
     const days: SalesDay[] = this.salesData?.byDay || [];

@@ -1,0 +1,91 @@
+<section class="admin-login-page">
+  <div class="admin-login-card">
+
+    <div class="admin-login-brand">
+      <img src="assets/images/logo.png" alt="Lakshmi Millets & Foods">
+
+      <h1>Lakshmi <span>Millets &amp; Foods</span></h1>
+      <p>Admin Panel</p>
+    </div>
+
+    <div class="admin-login-form">
+      <h2>Admin Login</h2>
+      <p class="subtitle">Login to access your dashboard</p>
+
+      <form [formGroup]="loginForm" (ngSubmit)="submitLogin()" novalidate>
+
+        <div
+          class="input-field"
+          [class.has-error]="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+        >
+          <span>✉️</span>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="Admin Email"
+            autocomplete="email"
+          >
+        </div>
+
+        <div
+          class="error-text"
+          *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid"
+        >
+          Please enter a valid email
+        </div>
+
+        <div
+          class="input-field"
+          [class.has-error]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+        >
+          <span>🔒</span>
+
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Password"
+            autocomplete="current-password"
+          >
+
+          <button
+            type="button"
+            class="show-password"
+            (click)="showPassword = !showPassword"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+
+        <div
+          class="error-text"
+          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+        >
+          Password must be at least 6 characters
+        </div>
+
+        <div class="error-text form-error" *ngIf="loginError">
+          {{ loginError }}
+        </div>
+
+        <button
+          type="submit"
+          class="login-button"
+          [disabled]="loginLoading"
+        >
+          <span *ngIf="!loginLoading">Login to Admin</span>
+          <span *ngIf="loginLoading">Logging in...</span>
+        </button>
+
+      </form>
+
+      <button
+        type="button"
+        class="back-button"
+        routerLink="/dashboard"
+      >
+        ← Back to Dashboard
+      </button>
+
+    </div>
+  </div>
+</section>

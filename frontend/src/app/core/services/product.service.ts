@@ -22,6 +22,21 @@ export class ProductService {
   getProduct(slug: string): Observable<Product> {
     return this.http.get<Product>(`${API_BASE_URL}/products/${slug}`);
   }
+getReviews(slug: string): Observable<{ total: number; average: number; reviews: any[] }> {
+    return this.http.get<{ total: number; average: number; reviews: any[] }>(
+      `${API_BASE_URL}/products/${slug}/reviews`
+    );
+  }
+
+  submitReview(
+    slug: string,
+    data: { userName: string; rating: number; comment: string }
+  ): Observable<any> {
+    return this.http.post<any>(
+      `${API_BASE_URL}/products/${slug}/reviews`,
+      data
+    );
+  }
 
   // ---------------- Admin (requires an admin-role JWT; AuthInterceptor attaches it) ----------------
 

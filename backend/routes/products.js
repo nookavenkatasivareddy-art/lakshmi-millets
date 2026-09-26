@@ -1,6 +1,7 @@
 const express = require('express');
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const Review = require('../models/Review');
 const { protect, adminOnly } = require('../middleware/auth');
 const router = express.Router();
 
@@ -85,10 +86,22 @@ router.get('/:slug', async (req, res) => {
 // ------------------------------------------------------------------
 
 // POST /api/products - create a new product
-// body: { name, categoryId | categorySlug, price, mrp, weight, image, description, stock, isPopular, slug? }
+// body: { name, categoryId | categorySlug, price, mrp, weight, image, description, stock, isPopular, isFeatured, brandId, productTypeId, slug? }
 router.post('/', protect, adminOnly, async (req, res) => {
   try {
-    const { name, price, mrp, weight, image, description, stock, isPopular } = req.body;
+    const {
+      name,
+      price,
+      mrp,
+      weight,
+      image,
+      description,
+      stock,
+      isPopular,
+      isFeatured,
+      brandId,
+      productTypeId
+    } = req.body;
 
     if (!name || price == null || mrp == null) {
       return res.status(400).json({ message: 'name, price and mrp are required' });
@@ -111,7 +124,10 @@ router.post('/', protect, adminOnly, async (req, res) => {
       image,
       description,
       stock: stock ?? 0,
-      isPopular: !!isPopular
+      isPopular: !!isPopular,
+      isFeatured: !!isFeatured,
+      ...(brandId ? { brandId } : {}),
+      ...(productTypeId ? { productTypeId } : {})
     });
 
     res.status(201).json(await attachCategory(product));
@@ -120,14 +136,27 @@ router.post('/', protect, adminOnly, async (req, res) => {
   }
 });
 
-// PUT /api/products/:id - update any product fields (name, price, mrp, image, category, description, isPopular...)
+// PUT /api/products/:id - update any product fields (name, price, mrp, image, category, description, isPopular, isFeatured, brandId, productTypeId...)
 // Use this for editing prices, swapping images, renaming, recategorizing, etc.
 router.put('/:id', protect, adminOnly, async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ message: 'Product not found' });
 
-    const { name, price, mrp, weight, image, description, stock, isPopular, slug } = req.body;
+    const {
+      name,
+      price,
+      mrp,
+      weight,
+      image,
+      description,
+      stock,
+      isPopular,
+      isFeatured,
+      brandId,
+      productTypeId,
+      slug
+    } = req.body;
 
     if (req.body.categoryId || req.body.categorySlug) {
       const categoryId = await resolveCategoryId(req.body);
@@ -150,6 +179,9 @@ router.put('/:id', protect, adminOnly, async (req, res) => {
     if (description !== undefined) product.description = description;
     if (stock !== undefined) product.stock = Math.max(0, stock);
     if (isPopular !== undefined) product.isPopular = !!isPopular;
+    if (isFeatured !== undefined) product.isFeatured = !!isFeatured;
+    if (brandId !== undefined) product.brandId = brandId || undefined;
+    if (productTypeId !== undefined) product.productTypeId = productTypeId || undefined;
     if (req.body.isActive !== undefined) product.isActive = !!req.body.isActive;
 
     await product.save();

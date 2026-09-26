@@ -15,10 +15,32 @@
   <div class="product-grid">
     <div class="product-card card" *ngFor="let p of products" [class.out-of-stock]="p.stock <= 0">
       <a [routerLink]="['/product', p.slug]" class="product-img">
-        <span class="stock-badge out" *ngIf="p.stock <= 0">Out of Stock</span>
-        <span class="stock-badge low" *ngIf="p.stock > 0 && p.stock <= 5">Only {{ p.stock }} left</span>
-        <img [src]="p.image | imageUrl:'products'" [alt]="p.name" onerror="this.src='assets/images/placeholder.jpg'">
-      </a>
+
+  <button
+    type="button"
+    class="wishlist-btn"
+    [class.active]="isInWishlist(p)"
+    (click)="toggleWishlist(p, $event)"
+    [attr.aria-label]="isInWishlist(p) ? 'Remove from wishlist' : 'Add to wishlist'"
+  >
+    {{ isInWishlist(p) ? '♥' : '♡' }}
+  </button>
+
+  <span class="stock-badge out" *ngIf="p.stock <= 0">
+    Out of Stock
+  </span>
+
+  <span class="stock-badge low" *ngIf="p.stock > 0 && p.stock <= 5">
+    Only {{ p.stock }} left
+  </span>
+
+  <img
+    [src]="p.image | imageUrl:'products'"
+    [alt]="p.name"
+    onerror="this.src='assets/images/placeholder.jpg'"
+  >
+
+</a>
       <a [routerLink]="['/product', p.slug]"><h4>{{ p.name }}</h4></a>
       <small class="weight">{{ p.weight }}</small>
       <div class="product-price">

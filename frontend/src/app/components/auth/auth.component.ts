@@ -71,7 +71,15 @@ export class AuthComponent implements OnInit {
     this.loginError = '';
     const { email, password } = this.loginForm.value;
     this.auth.login(email, password).subscribe({
-      next: () => { this.loginLoading = false; this.router.navigate(['/']); },
+      next: (res) => {
+  this.loginLoading = false;
+
+  if (res.user.role === 'admin') {
+    window.location.href = '/admin/';
+  } else {
+    this.router.navigate(['/']);
+  }
+},
       error: (err) => { this.loginLoading = false; this.loginError = err.error?.message || 'Login failed. Please check your credentials.'; }
     });
   }

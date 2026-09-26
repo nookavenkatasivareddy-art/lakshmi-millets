@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
+import { WishlistService } from '../../core/services/wishlist.service';
 import { CartService } from '../../core/services/cart.service';
 import { CategoryService } from '../../core/services/category.service';
 import { Product, Category } from '../../core/models/models';
@@ -22,7 +23,8 @@ export class ProductsComponent implements OnInit {
     private router: Router,
     private productService: ProductService,
     private categoryService: CategoryService,
-    private cart: CartService
+    private cart: CartService,
+    private wishlist: WishlistService,
   ) {}
 
   ngOnInit(): void {
@@ -56,5 +58,15 @@ export class ProductsComponent implements OnInit {
     if (product.stock <= 0) return;
     this.cart.addToCart(product, 1);
     this.router.navigate(['/checkout']);
-  }
+}
+  toggleWishlist(product: Product, event: Event): void {
+  event.preventDefault();
+  event.stopPropagation();
+  this.wishlist.toggle(product);
+}
+
+isInWishlist(product: Product): boolean {
+  return this.wishlist.isInWishlist(product.id);
+}
+
 }
