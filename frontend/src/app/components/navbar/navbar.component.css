@@ -438,3 +438,29 @@
   .icon-btn { width: 32px; height: 32px; }
   .mobile-toggle { padding: 4px; }
 }
+
+/* ===== Wishlist count badge ===== */
+.wishlist-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wishlist-count {
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #d32f2f;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+  box-sizing: border-box;
+  border: 2px solid #fff;
+}

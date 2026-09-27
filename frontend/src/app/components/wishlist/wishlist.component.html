@@ -43,9 +43,10 @@
           (click)="openProduct(product)"
         >
           <img
-            [src]="product.image"
-            [alt]="product.name"
-          />
+  [src]="product.image | imageUrl:'products'"
+  [alt]="product.name"
+  onerror="this.src='assets/images/placeholder.jpg'"
+/>
         </div>
 
         <!-- Product Details -->

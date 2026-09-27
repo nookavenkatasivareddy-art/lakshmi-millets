@@ -29,6 +29,7 @@ export class ProductDetailComponent implements OnInit {
   reviewSubmitting = false;
   reviewMessage = '';
   relatedProducts: Product[] = [];
+  wishlistMessage = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -171,9 +172,19 @@ export class ProductDetailComponent implements OnInit {
   event.preventDefault();
   event.stopPropagation();
 
-  if (this.product) {
-    this.wishlist.toggle(this.product);
-  }
+  if (!this.product) return;
+
+  const alreadyInWishlist = this.wishlist.isInWishlist(this.product.id);
+
+  this.wishlist.toggle(this.product);
+
+  this.wishlistMessage = alreadyInWishlist
+    ? 'Product removed from my wishlist'
+    : 'Product is added to my wishlist';
+
+  setTimeout(() => {
+    this.wishlistMessage = '';
+  }, 1800);
 }
 
 isInWishlist(): boolean {
@@ -184,10 +195,22 @@ isInWishlist(): boolean {
 isRelatedInWishlist(product: Product): boolean {
   return this.wishlist.isInWishlist(product.id);
 }
+
 toggleRelatedWishlist(product: Product, event: Event): void {
   event.preventDefault();
   event.stopPropagation();
+
+  const alreadyInWishlist = this.wishlist.isInWishlist(product.id);
+
   this.wishlist.toggle(product);
+
+  this.wishlistMessage = alreadyInWishlist
+    ? 'Product removed from my wishlist'
+    : 'Product is added to my wishlist';
+
+  setTimeout(() => {
+    this.wishlistMessage = '';
+  }, 1800);
 }
 
 addRelatedToCart(product: Product): void {

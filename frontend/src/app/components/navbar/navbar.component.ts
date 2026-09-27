@@ -4,6 +4,7 @@ import { CartService } from '../../core/services/cart.service';
 import { CategoryService } from '../../core/services/category.service';
 import { Category, AuthUser } from '../../core/models/models';
 import { Router } from '@angular/router';
+import { WishlistService } from '../../core/services/wishlist.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,6 +14,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   categories: Category[] = [];
   cartCount = 0;
+  wishlistCount = 0;
   currentUser: AuthUser | null = null;
   isAdmin = false;
 
@@ -35,20 +37,27 @@ export class NavbarComponent implements OnInit {
   }
 
   constructor(
-    private auth: AuthService,
-    private cart: CartService,
-    private categoryService: CategoryService,
-    private router: Router
-  ) {}
+  private auth: AuthService,
+  private cart: CartService,
+  private wishlist: WishlistService,
+  private categoryService: CategoryService,
+  private router: Router
+) {}
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe({
       next: cats => (this.categories = cats),
       error: () => (this.categories = [])
     });
+    
     this.cart.items$.subscribe(items => {
       this.cartCount = items.reduce((s, i) => s + i.quantity, 0);
     });
+
+    this.wishlist.wishlist$.subscribe(items => {
+  this.wishlistCount = items.length;
+});
+
     this.auth.currentUser$.subscribe(u => {
       this.currentUser = u;
       this.isAdmin = !!u && u.role === 'admin';
