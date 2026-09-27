@@ -1,6 +1,65 @@
 <section class="container products-page">
   <h2 class="section-title">Our <span class="highlight">Products</span></h2>
 
+    <!-- Filter & Sort Controls -->
+  <div class="products-toolbar">
+
+    <button type="button" class="toolbar-btn" (click)="toggleFilters()">
+      ☰ Filter
+    </button>
+
+    <button type="button" class="toolbar-btn" (click)="toggleSort()">
+      ⇅ Sort
+    </button>
+
+  </div>
+
+  <!-- Filter Panel -->
+  <div class="products-filter-panel" *ngIf="showFilters">
+    <div class="filter-panel-header">
+      <strong>Filter by Category</strong>
+      <button type="button" (click)="toggleFilters()">✕</button>
+    </div>
+
+    <button
+      type="button"
+      class="filter-option"
+      [class.active]="!activeCategory"
+      (click)="filterByCategory(''); toggleFilters()"
+    >
+      All Products
+    </button>
+
+    <button
+      type="button"
+      class="filter-option"
+      *ngFor="let c of categories"
+      [class.active]="activeCategory === c.slug"
+      (click)="filterByCategory(c.slug); toggleFilters()"
+    >
+      {{ c.name }}
+    </button>
+  </div>
+
+  <!-- Sort Panel -->
+  <div class="products-sort-panel" *ngIf="showSort">
+    <button type="button" (click)="setSort('price-low')">
+      Price: Low to High
+    </button>
+
+    <button type="button" (click)="setSort('price-high')">
+      Price: High to Low
+    </button>
+
+    <button type="button" (click)="setSort('name-az')">
+      Name: A to Z
+    </button>
+
+    <button type="button" (click)="setSort('name-za')">
+      Name: Z to A
+    </button>
+  </div>
+  
   <div class="filter-row">
     <button class="filter-pill" [class.active]="!activeCategory" (click)="filterByCategory('')">All</button>
     <button class="filter-pill" *ngFor="let c of categories" [class.active]="activeCategory === c.slug"

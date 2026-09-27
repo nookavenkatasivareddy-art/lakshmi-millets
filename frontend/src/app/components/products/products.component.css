@@ -103,3 +103,141 @@
   .filter-row { gap: 8px; }
   .filter-pill { padding: 5px 12px; font-size: 12px; }
 }
+
+/* ===== Products Filter & Sort Toolbar ===== */
+
+.products-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.toolbar-btn {
+  min-width: 110px;
+  height: 42px;
+  padding: 0 18px;
+  border: 1px solid #d9e2d5;
+  border-radius: 10px;
+  background: #fff;
+  color: #2f4f2f;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.toolbar-btn:hover {
+  border-color: var(--green);
+  color: var(--green);
+  background: #f7fbf5;
+}
+
+/* Filter panel */
+
+.products-filter-panel {
+  position: relative;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid #e3eadf;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.filter-panel-header button {
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.filter-option {
+  margin: 4px;
+  padding: 9px 14px;
+  border: 1px solid #d9e2d5;
+  border-radius: 20px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+}
+
+.filter-option.active {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+/* Sort panel */
+
+.products-sort-panel {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 0;
+  z-index: 20;
+  min-width: 210px;
+  margin-top: -10px;
+  padding: 8px;
+  border: 1px solid #e3eadf;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.products-sort-panel button {
+  padding: 11px 12px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.products-sort-panel button:hover {
+  background: #f4f8f2;
+  color: var(--green);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .products-toolbar {
+    justify-content: stretch;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .toolbar-btn {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .products-filter-panel {
+    padding: 12px;
+  }
+
+  .filter-option {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+
+  .products-sort-panel {
+    position: static;
+    width: 100%;
+    margin: 0 0 12px;
+    box-sizing: border-box;
+  }
+}

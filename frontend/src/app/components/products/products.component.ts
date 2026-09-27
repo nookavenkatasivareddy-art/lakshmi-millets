@@ -17,6 +17,9 @@ export class ProductsComponent implements OnInit {
   activeCategory = '';
   searchTerm = '';
   loading = true;
+    sortBy = '';
+  showFilters = false;
+  showSort = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -41,11 +44,50 @@ export class ProductsComponent implements OnInit {
   }
 
   load() {
-    this.loading = true;
-    this.productService.getProducts({ category: this.activeCategory, search: this.searchTerm }).subscribe({
-      next: p => { this.products = p; this.loading = false; },
-      error: () => { this.products = []; this.loading = false; }
-    });
+  this.loading = true;
+
+  this.productService.getProducts({
+    category: this.activeCategory,
+    search: this.searchTerm
+  }).subscribe({
+    next: p => {
+      this.products = p;
+      this.applySort();
+      this.loading = false;
+    },
+    error: () => {
+      this.products = [];
+      this.loading = false;
+    }
+  });
+}
+
+  setSort(sort: string): void {
+    this.sortBy = sort;
+    this.showSort = false;
+    this.applySort();
+  }
+
+  applySort(): void {
+    if (this.sortBy === 'price-low') {
+      this.products.sort((a, b) => Number(a.price) - Number(b.price));
+    } else if (this.sortBy === 'price-high') {
+      this.products.sort((a, b) => Number(b.price) - Number(a.price));
+    } else if (this.sortBy === 'name-az') {
+      this.products.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (this.sortBy === 'name-za') {
+      this.products.sort((a, b) => b.name.localeCompare(a.name));
+    }
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+    this.showSort = false;
+  }
+
+  toggleSort(): void {
+    this.showSort = !this.showSort;
+    this.showFilters = false;
   }
 
   filterByCategory(slug: string) {
