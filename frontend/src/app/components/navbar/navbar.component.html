@@ -37,8 +37,8 @@
 
     <!-- ACTIONS (right) -->
     <div class="header-actions">
-      <div class="search-wrap always-visible-search">
-
+      <!-- Desktop search -->
+<div class="search-wrap always-visible-search">
   <div class="search-box">
     <input
       type="text"
@@ -68,39 +68,124 @@
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
     </button>
+  </div>
+</div>
 
+<!-- Mobile search icon -->
+<button
+  type="button"
+  class="mobile-search-trigger"
+  (click)="toggleSearch()"
+  aria-label="Open search"
+  title="Search"
+>
+  <svg
+    viewBox="0 0 24 24"
+    width="21"
+    height="21"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <circle cx="11" cy="11" r="7"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</button>
+        
+      <!-- Mobile / tablet full-screen search -->
+      <!-- Mobile search panel -->
+<div class="mobile-search-overlay" *ngIf="showSearch">
+
+  <div class="mobile-search-top">
+    <button
+      type="button"
+      class="mobile-search-back"
+      (click)="toggleSearch()"
+      aria-label="Close search"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        width="22"
+        height="22"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
+
+    <div class="mobile-search-input">
+      <input
+        type="text"
+        placeholder="Search millets..."
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="onSearch()"
+        autofocus
+        aria-label="Search products"
+      >
+
+      <button
+        type="button"
+        (click)="onSearch()"
+        aria-label="Search"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-explore-section">
+    <h3>Explore More</h3>
+
+    <div class="mobile-category-chips">
+      <button
+        type="button"
+        *ngFor="let c of categories"
+        (click)="searchTerm = c.name; onSearch()"
+      >
+        {{ c.name }}
+      </button>
+    </div>
   </div>
 
 </div>
-        
-      <!-- Mobile / tablet full-screen search -->
-      <div class="mobile-search-overlay" *ngIf="showSearch">
-        <div class="mobile-search-header">
-          <span class="mobile-search-title">SEARCH OUR SITE</span>
-          <button class="mobile-search-close" (click)="toggleSearch()" aria-label="Close search">&times;</button>
-        </div>
 
-        <div class="mobile-search-body">
-          <button class="category-select" (click)="showCategoryPicker = true">
-            <span>{{ selectedCategoryName }}</span>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
+          <div class="mobile-explore-section">
+    <h3>Explore More</h3>
 
-          <div class="mobile-search-input">
-            <input
-              type="text"
-              placeholder="Search"
-              [(ngModel)]="searchTerm"
-              (keyup.enter)="onSearch()">
-            <button (click)="onSearch()" aria-label="Search">
-              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="7"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+    <div class="mobile-category-chips">
+      <button
+        type="button"
+        *ngFor="let c of categories"
+        (click)="searchTerm = c.name; onSearch()"
+      >
+        {{ c.name }}
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Category picker sheet (mobile/tablet) -->
+<div class="category-picker-backdrop" *ngIf="showCategoryPicker" (click)="showCategoryPicker = false">
 
       <!-- Category picker sheet (mobile/tablet) -->
       <div class="category-picker-backdrop" *ngIf="showCategoryPicker" (click)="showCategoryPicker = false">

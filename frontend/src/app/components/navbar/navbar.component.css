@@ -652,3 +652,203 @@
     flex-basis: 32px;
   }
 }
+/* =========================================================
+   MOBILE SEARCH
+   Desktop search remains unchanged
+   ========================================================= */
+
+.mobile-search-trigger {
+  display: none;
+  border: 0;
+  background: transparent;
+  padding: 6px;
+  cursor: pointer;
+  color: inherit;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-search-overlay {
+  display: none;
+}
+
+
+/* =========================================================
+   MOBILE ONLY
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  /* Hide permanently visible desktop search */
+  .always-visible-search {
+    display: none !important;
+  }
+
+  /* Show search icon */
+  .mobile-search-trigger {
+    display: inline-flex;
+  }
+
+  /* Full mobile search page */
+  .mobile-search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: block;
+    background: #fff;
+    overflow-y: auto;
+    padding: 0 18px 30px;
+  }
+
+  /* Top search row */
+  .mobile-search-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 0 14px;
+    border-bottom: 1px solid #eeeeee;
+  }
+
+  /* Back button */
+  .mobile-search-back {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #222;
+  }
+
+  /* Search input wrapper */
+  .mobile-search-top .mobile-search-input {
+    flex: 1;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  /* Search input */
+  .mobile-search-top .mobile-search-input input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    padding: 0 12px;
+    font-size: 15px;
+    background: transparent;
+    color: #222;
+  }
+
+  .mobile-search-top .mobile-search-input input::placeholder {
+    color: #999;
+  }
+
+  /* Search button */
+  .mobile-search-top .mobile-search-input button {
+    flex: 0 0 44px;
+    height: 100%;
+    border: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #333;
+  }
+
+  /* Explore More */
+  .mobile-explore-section {
+    padding-top: 24px;
+  }
+
+  .mobile-explore-section h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #222;
+  }
+
+  /* Category chips */
+  .mobile-category-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .mobile-category-chips button {
+    border: 1px solid #dddddd;
+    background: #fff;
+    color: #333;
+    border-radius: 22px;
+    padding: 9px 16px;
+    font-size: 14px;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .mobile-category-chips button:active {
+    background: #f5f5f5;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .mobile-search-overlay {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .mobile-search-top {
+    gap: 7px;
+  }
+
+  .mobile-search-back {
+    width: 34px;
+    height: 38px;
+  }
+
+  .mobile-search-top .mobile-search-input {
+    height: 44px;
+  }
+
+  .mobile-search-top .mobile-search-input input {
+    font-size: 14px;
+    padding-left: 10px;
+  }
+
+  .mobile-explore-section {
+    padding-top: 22px;
+  }
+
+  .mobile-explore-section h3 {
+    font-size: 17px;
+    margin-bottom: 14px;
+  }
+
+  .mobile-category-chips {
+    gap: 8px;
+  }
+
+  .mobile-category-chips button {
+    padding: 8px 13px;
+    font-size: 13px;
+  }
+
+}
