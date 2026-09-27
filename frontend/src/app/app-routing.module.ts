@@ -7,6 +7,7 @@ import { AdminOrdersComponent } from './components/admin-orders/admin-orders.com
 import { AdminSettingsComponent } from './components/admin-settings/admin-settings.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrdersComponent } from './components/orders/orders.component';
@@ -45,6 +46,10 @@ const routes: Routes = [
   { path: 'products/category/:slug', component: ProductsComponent },
   { path: 'product/:slug', component: ProductDetailComponent },
   { path: 'cart', component: CartComponent },
+  {
+  path: 'wishlist',
+  component: WishlistComponent
+},
   { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },
 

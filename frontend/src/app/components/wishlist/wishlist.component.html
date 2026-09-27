@@ -1,0 +1,91 @@
+<section class="wishlist-page">
+  <div class="container">
+
+    <div class="wishlist-header">
+      <div>
+        <h1>My Wishlist</h1>
+        <p *ngIf="wishlist.length">
+          {{ wishlist.length }} product{{ wishlist.length > 1 ? 's' : '' }} saved
+        </p>
+      </div>
+    </div>
+
+    <!-- Empty Wishlist -->
+    <div class="empty-wishlist" *ngIf="wishlist.length === 0">
+      <div class="empty-icon">♡</div>
+
+      <h2>Your wishlist is empty</h2>
+
+      <p>
+        Save your favourite products here and come back to them anytime.
+      </p>
+
+      <button
+        type="button"
+        class="shop-btn"
+        routerLink="/products"
+      >
+        Continue Shopping
+      </button>
+    </div>
+
+    <!-- Wishlist Products -->
+    <div class="wishlist-grid" *ngIf="wishlist.length > 0">
+
+      <article
+        class="wishlist-card"
+        *ngFor="let product of wishlist"
+      >
+
+        <!-- Product Image -->
+        <div
+          class="product-image"
+          (click)="openProduct(product)"
+        >
+          <img
+            [src]="product.image"
+            [alt]="product.name"
+          />
+        </div>
+
+        <!-- Product Details -->
+        <div class="product-info">
+
+          <h3
+            (click)="openProduct(product)"
+          >
+            {{ product.name }}
+          </h3>
+
+          <p class="price">
+            ₹{{ product.price }}
+          </p>
+
+          <div class="wishlist-actions">
+
+            <button
+              type="button"
+              class="remove-btn"
+              (click)="removeFromWishlist(product.id)"
+            >
+              Remove
+            </button>
+
+            <button
+              type="button"
+              class="cart-btn"
+              (click)="addToCart(product)"
+            >
+              Add to Cart
+            </button>
+
+          </div>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </div>
+</section>

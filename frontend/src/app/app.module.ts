@@ -13,6 +13,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ProductsComponent } from './components/products/products.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { CartComponent } from './components/cart/cart.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { OrdersComponent } from './components/orders/orders.component';
 import { AdminOrdersComponent } from './components/admin-orders/admin-orders.component';
@@ -46,6 +47,7 @@ import { ImageUrlPipe } from './core/pipes/image-url.pipe';
     ProductsComponent,
     ProductDetailComponent,
     CartComponent,
+    WishlistComponent,
     CheckoutComponent,
     OrdersComponent,
     AdminOrdersComponent,
