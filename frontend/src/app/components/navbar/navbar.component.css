@@ -525,3 +525,18 @@
 .always-visible-search .search-box button:hover {
   color: #2e7d32;
 }
+
+/* ===== Center Main Navigation ===== */
+@media (min-width: 1025px) {
+  .header-inner {
+    position: relative;
+  }
+
+  .main-nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 520px);
+  }
+}
