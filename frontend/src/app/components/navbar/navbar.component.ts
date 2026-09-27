@@ -94,7 +94,6 @@ export class NavbarComponent implements OnInit {
     } else {
       return;
     }
-    this.showSearch = false;
     this.showCategoryPicker = false;
     this.mobileMenuOpen = false;
   }
